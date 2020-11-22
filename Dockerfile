@@ -24,3 +24,5 @@ RUN composer --working-dir=/var/www/vendor/51degrees/fiftyone.geolocation instal
 
 RUN mkdir /var/www/images
 RUN chmod a+rwx /var/www/images
+RUN mkdir /var/www/cache
+RUN chmod a+rwx /var/www/cache

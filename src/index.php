@@ -7,15 +7,63 @@ use fiftyone\pipeline\geolocation\GeoLocationPipelineBuilder;
 $first_debug_print = TRUE;
 function decho($s) {
     global $first_debug_print;
-    if ($first_debug_print) {
-        echo "<pre>";
-        $first_debug_print = FALSE;
+    if (isset($_GET["debug"])) {
+        if ($first_debug_print) {
+            echo "<pre>";
+            $first_debug_print = FALSE;
+        }
+        echo $s . "\n";
     }
-    if (isset($_GET["debug"])) echo $s . "\n";
+}
+
+function get_filename($lat, $lon) {
+    $fn = "/var/www/images/img_" . $lat . "__" . $lon . ".jpg";
+    decho("Filename from $lat and $lon is $fn");
+    return $fn;
+}
+
+function get_cache_filename($key) {
+    $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '=', $key)));
+    $fn = "/var/www/cache/$slug";
+    return $fn;
+}
+
+function get_cache_key($key) {
+    decho("Checking cache for key $key");
+    $fn = get_cache_filename($key);
+    if (file_exists($fn)) {
+        decho("Returning cached data for $key");
+        return file_get_contents($fn);
+    }
+    decho("No cache for key $key");
+    return null;
+}
+
+function store_cache_key($key, $data) {
+    decho("Storing data in cache for key $key");
+    $fn = get_cache_filename($key);
+    file_put_contents($fn, $data);
+}
+
+function cached_json($url) {
+    $data = get_cache_key($url);
+    if (!$data) {
+        $data = file_get_contents($url);
+        store_cache_key($url, $data);
+    }
+    $as_json = json_decode($data, true);
+    return $as_json;
 }
 
 function geoloc51d($lat, $lon) {
     /* Given a latitude and longitude, return a string suitable for looking up this location in wikidata */
+
+    $cache_key = "51d," . $lat . "," . $lon;
+    $cached_locations = get_cache_key($cache_key);
+    if ($cached_locations) {
+        return json_decode($cached_locations);
+    }
+
     $resourceKey = $_ENV["RESOURCEKEY"];
     $settings = array("resourceKey" => $resourceKey, "locationProvider" => "fiftyonedegrees");
     $builder = new GeoLocationPipelineBuilder($settings);
@@ -54,11 +102,13 @@ function geoloc51d($lat, $lon) {
         $names_region[] = $country->value;
         $names_town_region[] = $country->value;
     }
-    return [
+    $locations = [
         join($names_town_region, ", "),
         join($names_town, ", "),
         join($names_region, ", "),
     ];
+    store_cache_key($cache_key, json_encode($locations));
+    return $locations;
     
 }
 
@@ -79,9 +129,8 @@ function wikidata_image($text_array, $width) {
     );
     $url = "https://www.wikidata.org/w/api.php?" . http_build_query($qsl);
     decho("wd search for $item as $url");
-    $wd = file_get_contents($url);
     try {
-        $wdo = json_decode($wd, true);
+        $wdo = cached_json($url);
     } catch(Exception $e) {
         decho("No JSON search for $item so trying with next one");
         \array_splice($text_array, 0, 1);
@@ -98,9 +147,8 @@ function wikidata_image($text_array, $width) {
     // get the data for that entity ID (in theory this could be done with SPARQL but life's too short)
     $entity_url = "https://www.wikidata.org/wiki/Special:EntityData/$entityid.json";
     decho("Get entity details from $entity_url");
-    $wd = file_get_contents($entity_url);
     try {
-        $wdo = json_decode($wd, true);
+        $wdo = cached_json($entity_url);
     } catch(Exception $e) {
         decho("Couldn't find an image for $item so trying with next one");
         \array_splice($text_array, 0, 1);
@@ -126,9 +174,8 @@ function wikidata_image($text_array, $width) {
 
 function xeno_canto($lat, $lon) {
     $url = "https://www.xeno-canto.org/api/2/recordings?query=lat:$lat%20lon:$lon";
-    $xd = file_get_contents($url);
     try {
-        $xdo = json_decode($xd, true);
+        $xdo = cached_json($url);
     } catch(Exception $e) { decho("no xeno json"); return null; }
     $birds = array();
     $species = array();
@@ -163,6 +210,50 @@ function xeno_canto($lat, $lon) {
     return $birds;
 }
 
+
+
+function scaler($im, $w, $h) {
+    // scales and centre crops to the required size
+    $origw = imagesx($im);
+    $origh = imagesy($im);
+    $scalew = $origw / $w;
+    $scaleh = $origh / $h;
+    if ($scalew > $scaleh) {
+        $nw = ceil($origw / $scaleh);
+        $nh = ceil($origh / $scaleh);
+    } else {
+        $nw = ceil($origw / $scalew);
+        $nh = ceil($origh / $scalew);
+    }
+    decho("Scaling image from $origw $origh to $nw $nh to be bigger than $w $h");
+    $n = imagescale($im, $nw, $nh);
+    decho("Scaled image $im to new handle $n");
+    if ($n === FALSE) {
+        decho("Image scale failed!");
+    }
+    if ($nw > $w) {
+        $cx = ceil(($nw - $w) / 2);
+        $cy = 0;
+    } else if ($nh > $h) {
+        $cx = 0;
+        $cy = ceil(($nh - $h) / 2);
+    }
+    decho("Cropping image of size $nw $nh to be size $w $h from point $cx $cy");
+    $n = imagecrop($n, array("x" => $cx, "y" => $cy, "width" => $w, "height" => $h));
+    return $n;
+}
+
+function add_bird($base, $bird, $w, $h, $x, $y) {
+    decho("Loading bird image: " . $bird);
+    $b1 = imagecreatefromjpeg($bird);
+    if ($b1 === FALSE) {
+        decho("Couldn't load bird image $bird!");
+        return;
+    }
+    $b1 = scaler($b1, $w, $h);
+    imagecopymerge($base, $b1, $x, $y, 0, 0, $w, $h, 100);
+}
+
 function create_save_image($fn, $lat, $lon) {
     $loc_descriptions = geoloc51d($lat, $lon);
     $loc_descriptions[] = "field"; // ultimate fallback if we have no location images
@@ -172,30 +263,56 @@ function create_save_image($fn, $lat, $lon) {
     decho("Base image URL is $image_url");
     $birds = xeno_canto($lat, $lon);
     decho("Got birds");
+
+    // required size for output image
+    $outw = 800;
+    $outh = 540;
+
+    // Get base image into a GD image object
+    decho("Loading base image $image_url");
     $base = imagecreatefromjpeg($image_url);
     if ($base === FALSE) {
-        decho("COuldn't load $image_url");
+        decho("Couldn't load $image_url");
         die();
     }
 
-    $outw = 800;
-    $outh = 600;
-    $origw = imagesx($base);
-    $origh = imagesy($base);
-    $scalew = $outw / $origw;
-    $scaleh = $outh / $origh;
-    if ($scalew > $scaleh) {
-        $nbase = imagescale($base, $outw, -1);
-    } else {
-        $nbase = imagescale($base, $origw * $scaleh);
-    }
-    imagejpeg($nbase, $fn);
+    // Scale base image to our desired size
+    decho("Scaling base image $image_url handle $base to size $outw $outh");
+    $base = scaler($base, $outw, $outh);
+
+    // composite birds onto base image
+    add_bird($base, $birds[0]["image"], 200, 120, 300, 30);
+    add_bird($base, $birds[1]["image"], 200, 120, 133, 180);
+    add_bird($base, $birds[2]["image"], 200, 120, 466, 180);
+
+    // slogan
+    $slogan = "HAPPY BIRDDAY";
+    $font = "bettynoir.ttf";
+    $distance_from_bottom = 0;
+    $fontsize = 80;
+    $col = imagecolorallocate ($base, 255, 255, 0);
+    $tb = imagettfbbox($fontsize, 0, $font, $slogan);
+    $tw = $tb[4] - $tb[6];
+    $th = $tb[1] - $tb[7];
+    $x = ($outw - $tw) / 2;
+    $y = $outh - $th - $distance_from_bottom;
+    decho("Slogan bounding box is: " . json_encode($tb) . " (i.e., $tw x $th in size)");
+    decho("So positioning at $x $y");
+    imagettftext ($base, $fontsize, 0, $x, $y, $col, $font, $slogan);
+
+    // write final image to disk
+    imagejpeg($base, $fn);
 }
 
-function get_filename($lat, $lon) {
-    $fn = "/var/www/images/img_" . $lat . "__" . $lon . ".jpg";
-    decho("Filename from $lat and $lon is $fn");
-    return $fn;
+
+if (isset($_GET["nocache"])) {
+    decho("Wiping data cache as nocache is set");
+    $files = glob('/var/www/cache/*'); // get all file names
+    foreach($files as $file){ // iterate files
+        if(is_file($file)) {
+            unlink($file); // delete file
+        }
+    }
 }
 
 /* Validate parameters */
@@ -207,10 +324,14 @@ $lon = filter_var($_GET["lon"], FILTER_VALIDATE_FLOAT, $lon_options);
 /* Serve HTML, or image */
 if ($_GET["type"] == "img") {
     $fn = get_filename($lat, $lon);
-    if (!file_exists($fn)) {
+    if (!file_exists($fn) || isset($_GET["debug"])) {
         create_save_image($fn, $lat, $lon);
     }
     if (file_exists($fn)) {
+        if (isset($_GET["debug"])) {
+            decho("Image saved OK but not writing it because of debug mode.");
+            exit;
+        }
         header('Content-Description: File Transfer');
         header('Content-Type: image/jpeg');
         header('Content-Length: ' . filesize($fn));
@@ -220,6 +341,6 @@ if ($_GET["type"] == "img") {
         decho("image failure");
     }
 } else {
-    echo "<html><body>page! <img src='index.php?lat=$lat&amp;lon=$lon&amp;type=img' alt='bad img' style='background-color:red' width='800' height='600'>";
+    echo "<html><body>page! <img src='index.php?lat=$lat&amp;lon=$lon&amp;type=img' alt='loading!' style='background-color:red' width='800' height='600'>";
 }
 
