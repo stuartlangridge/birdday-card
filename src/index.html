@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Birdday Card</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+<style>
+#themap {
+    height: 400px;
+}
+</style>
+</head>
+<body>
+
+<div id="themap"></div>
+
+<form action="birdday-card.php">
+    <label>Latitude: <input type="number"  step="any" name="lat" required></label>
+    <label>Longitude: <input type="number" step="any"  name="lon" required></label>
+    <input type="submit" name="Make my card!">
+</form>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+   crossorigin=""></script>
+<script>
+const map = L.map('themap').setView([51.505, -0.09], 3);
+L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox/streets-v11',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: 'pk.eyJ1Ijoic3R1YXJ0bGFuZ3JpZGdlIiwiYSI6ImNraHU4bTExdDAydzMzNG1vbmM1YWxoMW4ifQ.Fl0ElB8StjHD-MpiKUZLLg'
+}).addTo(map);
+
+let marker;
+
+function onMapClick(e) {
+    if (!marker) {
+        marker = L.marker(e.latlng).addTo(map);
+    } else {
+        marker.setLatLng(e.latlng);
+    }
+    document.getElementsByName("lat")[0].value = e.latlng.lat.toFixed(6);
+    document.getElementsByName("lon")[0].value = e.latlng.lng.toFixed(6);
+}
+map.on('click', onMapClick);
+
+</script>
+</body>
+</html>

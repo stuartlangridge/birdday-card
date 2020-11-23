@@ -1,5 +1,4 @@
-<?php 
-
+<?php
 require(__DIR__ . "/../vendor/autoload.php");
 
 use fiftyone\pipeline\geolocation\GeoLocationPipelineBuilder;
@@ -146,6 +145,7 @@ function wikidata_image($text_array, $width) {
 
     // get the data for that entity ID (in theory this could be done with SPARQL but life's too short)
     $entity_url = "https://www.wikidata.org/wiki/Special:EntityData/$entityid.json";
+    $entitypublicurl = "https://www.wikidata.org/wiki/Special:EntityData/$entityid";
     decho("Get entity details from $entity_url");
     try {
         $wdo = cached_json($entity_url);
@@ -169,11 +169,12 @@ function wikidata_image($text_array, $width) {
         return wikidata_image($text_array, $width);
     }
     $picurl = "http://commons.wikimedia.org/wiki/Special:FilePath/" . rawurlencode($imgname) . "?width=" . $width;
-    return $picurl;
+    return array($picurl, $entitypublicurl);
 }
 
 function xeno_canto($lat, $lon) {
     $url = "https://www.xeno-canto.org/api/2/recordings?query=lat:$lat%20lon:$lon";
+    $publicurl = "https://www.xeno-canto.org/explore?query=lat%3A$lat%20lon%3A$lon";
     try {
         $xdo = cached_json($url);
     } catch(Exception $e) { decho("no xeno json"); return null; }
@@ -187,11 +188,13 @@ function xeno_canto($lat, $lon) {
             decho("Bird is $birdspec");
             if (!in_array($birdspec, $species)) {
                 $species[] = $birdspec;
-                $birdimg = wikidata_image([$birdspec], 400);
+                list($birdimg, $birdpublic) = wikidata_image([$birdspec], 400);
                 if ($birdimg) {
                     decho("Got bird image $birdimg");
                     $birds[] = array(
                         "image" => $birdimg,
+                        "wikidata" => $birdpublic,
+                        "species" => $birdspec,
                         "sound_url" => $xdo["recordings"][$i]["file"]
                     );
                     if (count($birds) == 3) break;
@@ -207,7 +210,7 @@ function xeno_canto($lat, $lon) {
         }
         $i += 1;
     }
-    return $birds;
+    return array($birds, $publicurl);
 }
 
 
@@ -254,15 +257,22 @@ function add_bird($base, $bird, $w, $h, $x, $y) {
     imagecopymerge($base, $b1, $x, $y, 0, 0, $w, $h, 100);
 }
 
-function create_save_image($fn, $lat, $lon) {
+function create_save_image($fn, $lat, $lon, $data_cache_key) {
     $loc_descriptions = geoloc51d($lat, $lon);
     $loc_descriptions[] = "field"; // ultimate fallback if we have no location images
     $loc_descriptions_combined = join($loc_descriptions, " | ");
     decho("Location descriptions are $loc_descriptions_combined");
-    $image_url = wikidata_image($loc_descriptions, 1000);
+    list($image_url, $townurl) = wikidata_image($loc_descriptions, 1000);
     decho("Base image URL is $image_url");
-    $birds = xeno_canto($lat, $lon);
+    list($birds, $xenourl) = xeno_canto($lat, $lon);
     decho("Got birds");
+
+    store_cache_key($data_cache_key, json_encode(array(
+        "birds" => $birds,
+        "xenourl" => $xenourl,
+        "location" => $loc_descriptions[0],
+        "town" => $townurl
+    )));
 
     // required size for output image
     $outw = 800;
@@ -304,43 +314,12 @@ function create_save_image($fn, $lat, $lon) {
     imagejpeg($base, $fn);
 }
 
-
-if (isset($_GET["nocache"])) {
-    decho("Wiping data cache as nocache is set");
-    $files = glob('/var/www/cache/*'); // get all file names
-    foreach($files as $file){ // iterate files
-        if(is_file($file)) {
-            unlink($file); // delete file
-        }
-    }
+function validate() {
+    /* Validate parameters */
+    $lat_options = array('options' => array('default' => 0, 'min_range' => -90, 'max_range' => 90));
+    $lon_options = array('options' => array('default' => 0, 'min_range' => -180, 'max_range' => 180));
+    $lat = filter_var($_GET["lat"], FILTER_VALIDATE_FLOAT, $lat_options);
+    $lon = filter_var($_GET["lon"], FILTER_VALIDATE_FLOAT, $lon_options);
+    $data_cache_key = "data," . $lat . "," . $lon;
+    return array($lat, $lon, $data_cache_key);
 }
-
-/* Validate parameters */
-$lat_options = array('options' => array('default' => 0, 'min_range' => -90, 'max_range' => 90));
-$lon_options = array('options' => array('default' => 0, 'min_range' => -180, 'max_range' => 180));
-$lat = filter_var($_GET["lat"], FILTER_VALIDATE_FLOAT, $lat_options);
-$lon = filter_var($_GET["lon"], FILTER_VALIDATE_FLOAT, $lon_options);
-
-/* Serve HTML, or image */
-if ($_GET["type"] == "img") {
-    $fn = get_filename($lat, $lon);
-    if (!file_exists($fn) || isset($_GET["debug"])) {
-        create_save_image($fn, $lat, $lon);
-    }
-    if (file_exists($fn)) {
-        if (isset($_GET["debug"])) {
-            decho("Image saved OK but not writing it because of debug mode.");
-            exit;
-        }
-        header('Content-Description: File Transfer');
-        header('Content-Type: image/jpeg');
-        header('Content-Length: ' . filesize($fn));
-        readfile($fn);
-        exit;
-    } else {
-        decho("image failure");
-    }
-} else {
-    echo "<html><body>page! <img src='index.php?lat=$lat&amp;lon=$lon&amp;type=img' alt='loading!' style='background-color:red' width='800' height='600'>";
-}
-
