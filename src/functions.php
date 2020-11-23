@@ -16,14 +16,14 @@ function decho($s) {
 }
 
 function get_filename($lat, $lon) {
-    $fn = "/var/www/images/img_" . $lat . "__" . $lon . ".jpg";
+    $fn = __DIR__ . "/../images/img_" . $lat . "__" . $lon . ".jpg";
     decho("Filename from $lat and $lon is $fn");
     return $fn;
 }
 
 function get_cache_filename($key) {
     $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '=', $key)));
-    $fn = "/var/www/cache/$slug";
+    $fn = __DIR__ . "/../cache/$slug";
     return $fn;
 }
 
