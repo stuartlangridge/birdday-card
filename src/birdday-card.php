@@ -2,16 +2,6 @@
 
 require "functions.php";
 
-if (isset($_GET["nocache"])) {
-    decho("Wiping data cache as nocache is set");
-    $files = glob('/var/www/cache/*'); // get all file names
-    foreach($files as $file){ // iterate files
-        if(is_file($file)) {
-            unlink($file); // delete file
-        }
-    }
-}
-
 list($lat, $lon, $data_cache_key) = validate();
 
 ?>
@@ -46,9 +36,14 @@ list($lat, $lon, $data_cache_key) = validate();
 <body>
 <h1>Birdday Card</h1>
 <img id="card" src="img.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>"
-     alt="loading your card..." width="800" height="540">
+     alt="loading your card..." width="800" height="540" onerror="imgfail()">
 <p><a href="./">Make your own birdday card</a></p>
 <p><a href="details.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>">Learn about this birdday card</a></p>
+<script>
+function imgfail() {
+    alert("didn't load");
+}
+</script>
 </body>
 </html>
 

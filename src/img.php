@@ -2,6 +2,16 @@
 
 require "functions.php";
 
+if (isset($_GET["nocache"])) {
+    decho("Wiping data cache as nocache is set");
+    $files = glob('/var/www/cache/*'); // get all file names
+    foreach($files as $file){ // iterate files
+        if(is_file($file)) {
+            unlink($file); // delete file
+        }
+    }
+}
+
 list($lat, $lon, $data_cache_key) = validate();
 
 $fn = get_filename($lat, $lon);

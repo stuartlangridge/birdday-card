@@ -1,6 +1,5 @@
 <?php
 require(__DIR__ . "/../vendor/autoload.php");
-
 use fiftyone\pipeline\geolocation\GeoLocationPipelineBuilder;
 
 $first_debug_print = TRUE;
@@ -23,12 +22,21 @@ function get_filename($lat, $lon) {
 
 function get_cache_filename($key) {
     $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '=', $key)));
+    if (strlen($slug) > 100) {
+        $nslug = substr($slug, 0, 100) . "-hash-" . md5($slug);
+        decho("Slug $slug is too long; shortening with hash to $nslug");
+        $slug = $nslug;
+    }
     $fn = __DIR__ . "/../cache/$slug";
     return $fn;
 }
 
 function get_cache_key($key) {
     decho("Checking cache for key $key");
+    if (isset($_GET["skipcache"])) {
+        decho("Skipping cache as commanded");
+        return null;
+    }
     $fn = get_cache_filename($key);
     if (file_exists($fn)) {
         decho("Returning cached data for $key");
@@ -73,42 +81,49 @@ function geoloc51d($lat, $lon) {
 
     $result = $flowData->process();
 
-    $names_town_region = array();
-    $names_town = array();
-    $names_region = array();
-
     $town = null; $region = null; $state = null; $country = null;
     try { $town = $flowData->location->town; } catch(Exception $e) {}
     try { $region = $flowData->location->region; } catch(Exception $e) {}
     try { $state = $flowData->location->state; } catch(Exception $e) {}
     try { $country = $flowData->location->country; } catch(Exception $e) {}
 
-    if ($town && $town->hasValue) {
-        $names_town_region[] = $town->value;
-        $names_town[] = $town->value;
+    if (!$town->hasValue) $town = null;
+    if (!$region->hasValue) $region = null;
+    if (!$state->hasValue) $state = null;
+    if (!$country->hasValue) $country = null;
+
+    // names we use to look for imagery, falling back to the next one if one has no image or no search result
+    // only include a name if all parts of it are present
+    // town+region+state+country, town+region+country, town+state+country, region+state+country,
+    // town+country, region+country, state+country, country
+    $names = array();
+
+    if ($town && $region && $state && $country) {
+        $names[] = [join([$town->value, $region->value, $state->value, $country->value], ","), "town+region+state+country"];
     }
-    if ($region && $region->hasValue) {
-        $names_region[] = $region->value;
-        $names_town_region[] = $region->value;
+    if ($town && $region && $country) {
+        $names[] = [join([$town->value, $region->value, $country->value], ","), "town+region+country"];
     }
-    if ($state && $state->hasValue) {
-        $names_town[] = $state->value;
-        $names_region[] = $state->value;
-        $names_town_region[] = $state->value;
+    if ($town && $state && $country) {
+        $names[] = [join([$town->value, $state->value, $country->value], ","), "town+state+country"];
     }
-    if ($country && $country->hasValue) {
-        $names_town[] = $country->value;
-        $names_region[] = $country->value;
-        $names_town_region[] = $country->value;
+    if ($region && $state && $country) {
+        $names[] = [join([$region->value, $state->value, $country->value], ","), "region+state+country"];
     }
-    $locations = [
-        join($names_town_region, ", "),
-        join($names_town, ", "),
-        join($names_region, ", "),
-    ];
-    store_cache_key($cache_key, json_encode($locations));
-    return $locations;
-    
+    if ($town && $country) {
+        $names[] = [join([$town->value, $country->value], ","), "town+country"];
+    }
+    if ($region && $country) {
+        $names[] = [join([$region->value, $country->value], ","), "region+country"];
+    }
+    if ($state && $country) {
+        $names[] = [join([$state->value, $country->value], ","), "state+country"];
+    }
+    if ($country) {
+        $names[] = [$country->value, "country"];
+    }
+    store_cache_key($cache_key, json_encode($names));
+    return $names;
 }
 
 function wikidata_image($text_array, $width) {
@@ -118,8 +133,13 @@ function wikidata_image($text_array, $width) {
         return null;
     }
     $item = $text_array[0];
-    $items_combined = join($text_array, " | ");
-    decho("Wikidata search for $item from $items_combined");
+    if (is_array($item)) {
+        $itemtype = $item[1];
+        $item = $item[0];
+    } else {
+        $itemtype = "unspecified";
+    }
+    decho("Wikidata search for $item of type $itemtype");
     $qsl = array(
         "action" => "query",
         "list" => "search",
@@ -156,6 +176,7 @@ function wikidata_image($text_array, $width) {
     }
 
     // an image is claim type P18, in wikidata language
+    // a banner image is claim type P948, which we check for as well
     try {
         $imgname = $wdo["entities"][$entityid]["claims"]["P18"][0]["mainsnak"]["datavalue"]["value"];
     } catch(Exception $e) {
@@ -163,8 +184,18 @@ function wikidata_image($text_array, $width) {
         \array_splice($text_array, 0, 1);
         return wikidata_image($text_array, $width);
     }
-    if (!$imgname || strlen($imgname) == 0) {
-        decho("Couldn't find an image for $item so trying with next one");
+    if (!$imgname) {
+        try {
+            decho("Looking for page banner image because no image was found");
+            $imgname = $wdo["entities"][$entityid]["claims"]["P948"][0]["mainsnak"]["datavalue"]["value"];
+        } catch(Exception $e) {
+            decho("Couldn't find an image entry for $item so trying with next one");
+            \array_splice($text_array, 0, 1);
+            return wikidata_image($text_array, $width);
+        }
+    }
+    if (!$imgname || strlen($imgname) == 0 || !stripos($imgname, ".jpg")) {
+        decho("Couldn't find a .jpg image for $item so trying with next one");
         \array_splice($text_array, 0, 1);
         return wikidata_image($text_array, $width);
     }
@@ -248,7 +279,7 @@ function scaler($im, $w, $h) {
 
 function add_bird($base, $bird, $w, $h, $x, $y) {
     decho("Loading bird image: " . $bird);
-    $b1 = imagecreatefromjpeg($bird);
+    $b1 = @imagecreatefromjpeg($bird);
     if ($b1 === FALSE) {
         decho("Couldn't load bird image $bird!");
         return;
@@ -259,8 +290,12 @@ function add_bird($base, $bird, $w, $h, $x, $y) {
 
 function create_save_image($fn, $lat, $lon, $data_cache_key) {
     $loc_descriptions = geoloc51d($lat, $lon);
-    $loc_descriptions[] = "field"; // ultimate fallback if we have no location images
-    $loc_descriptions_combined = join($loc_descriptions, " | ");
+    $loc_descriptions[] = ["Area 51", "last fallback"]; // ultimate fallback if we have no location images
+    $loc_descriptions_combined = [];
+    foreach ($loc_descriptions as $tn) {
+        $loc_descriptions_combined[] = $tn[0];
+    }
+    $loc_descriptions_combined = join($loc_descriptions_combined, " | ");
     decho("Location descriptions are $loc_descriptions_combined");
     list($image_url, $townurl) = wikidata_image($loc_descriptions, 1000);
     decho("Base image URL is $image_url");
