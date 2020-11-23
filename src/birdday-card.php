@@ -36,12 +36,42 @@ list($lat, $lon, $data_cache_key) = validate();
 <body>
 <h1>Birdday Card</h1>
 <img id="card" src="img.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>"
-     alt="loading your card..." width="800" height="540" onerror="imgfail()">
+     alt="loading your card..." width="800" height="540" onerror="imgfail()" onload="imgsuccess()">
+<div id="audios"></div>
 <p><a href="./">Make your own birdday card</a></p>
 <p><a href="details.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>">Learn about this birdday card</a></p>
 <script>
 function imgfail() {
-    alert("didn't load");
+    console.log("image didn't load. Do something relevant.");
+}
+function imgsuccess() {
+    console.log("image loaded OK, in an old browser.");
+}
+</script>
+<script module async>
+async function imgsuccess() {
+    try {
+        const response = await fetch("audios.php?lat=<?php echo $lat; ?>&lon=<?php echo $lon; ?>");
+        if (!response.ok) {
+            console.log(`Bad response from audios (${response.status}); bailing.`);
+            return;
+        }
+        const audios = await response.json();
+        const container = document.getElementById("audios");
+        audios.forEach(adata => {
+            const audio = document.createElement("audio");
+            const acontainer = document.createElement("div");
+            const span = document.createElement("span");
+            audio.controls = true;
+            audio.src = adata.src;
+            span.append(adata.species);
+            acontainer.append(span);
+            acontainer.append(audio);
+            container.append(acontainer);
+        })
+    } catch(e) {
+        console.log("Error fetching audios, so ignoring.", e);
+    }
 }
 </script>
 </body>
