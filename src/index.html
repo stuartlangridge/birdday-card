@@ -6,20 +6,51 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
    crossorigin=""/>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Roboto&display=swap" rel="stylesheet"> 
 <style>
+html {
+    background: #FBD1E5;
+    min-height: 100vh;
+    font-family: Roboto, sans-serif;
+    padding: 1.5rem 0;
+    font-size: min(max(1rem, 4vw), 22px);
+}
+body {
+    padding: 0; margin: 0;
+}
+body > *:not(#themap) { padding-left: 1.5rem; padding-right: 1.5rem; }
+h1 {
+    color: #522D7E;
+    font-family: "Luckiest Guy", cursive;
+    font-size: 2rem;
+    line-height: 2rem;
+    margin-top: calc((1.5rem - 2rem) + 1.5rem);
+    margin-bottom: 1.5rem;
+    font-size: min(max(1rem, 8vw), 60px);
+    text-align: center;
+    text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+}
+p {
+    line-height: 1.5rem;
+    margin-bottom: 1.5rem;
+}
 #themap {
     height: 400px;
+    filter: sepia(80%) hue-rotate(260deg);
 }
 </style>
 </head>
 <body>
+
+<h1>Your Birdday Card!</h1>
 
 <div id="themap"></div>
 
 <form action="birdday-card.php">
     <label>Latitude: <input type="number"  step="any" name="lat" required></label>
     <label>Longitude: <input type="number" step="any"  name="lon" required></label>
-    <input type="submit" name="Make my card!">
+    <input type="submit" value="Make my card!">
 </form>
 
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
