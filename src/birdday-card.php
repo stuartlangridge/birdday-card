@@ -40,6 +40,7 @@ list($lat, $lon, $data_cache_key) = validate();
 <div id="audios"></div>
 <p><a href="./">Make your own birdday card</a></p>
 <p><a href="details.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>">Learn about this birdday card</a></p>
+<p><a href="about.html">Learn about the birdday card app</a></p>
 <script>
 function imgfail() {
     console.log("image didn't load. Do something relevant.");

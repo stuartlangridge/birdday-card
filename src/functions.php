@@ -99,25 +99,25 @@ function geoloc51d($lat, $lon) {
     $names = array();
 
     if ($town && $region && $state && $country) {
-        $names[] = [join([$town->value, $region->value, $state->value, $country->value], ","), "town+region+state+country"];
+        $names[] = [join([$town->value, $region->value, $state->value, $country->value], ", "), "town+region+state+country"];
     }
     if ($town && $region && $country) {
-        $names[] = [join([$town->value, $region->value, $country->value], ","), "town+region+country"];
+        $names[] = [join([$town->value, $region->value, $country->value], ", "), "town+region+country"];
     }
     if ($town && $state && $country) {
-        $names[] = [join([$town->value, $state->value, $country->value], ","), "town+state+country"];
+        $names[] = [join([$town->value, $state->value, $country->value], ", "), "town+state+country"];
     }
     if ($region && $state && $country) {
-        $names[] = [join([$region->value, $state->value, $country->value], ","), "region+state+country"];
+        $names[] = [join([$region->value, $state->value, $country->value], ", "), "region+state+country"];
     }
     if ($town && $country) {
-        $names[] = [join([$town->value, $country->value], ","), "town+country"];
+        $names[] = [join([$town->value, $country->value], ", "), "town+country"];
     }
     if ($region && $country) {
-        $names[] = [join([$region->value, $country->value], ","), "region+country"];
+        $names[] = [join([$region->value, $country->value], ", "), "region+country"];
     }
     if ($state && $country) {
-        $names[] = [join([$state->value, $country->value], ","), "state+country"];
+        $names[] = [join([$state->value, $country->value], ", "), "state+country"];
     }
     if ($country) {
         $names[] = [$country->value, "country"];
@@ -277,7 +277,7 @@ function scaler($im, $w, $h) {
     return $n;
 }
 
-function add_bird($base, $bird, $w, $h, $x, $y) {
+function add_bird($base, $bird, $w, $h, $x, $y, $border) {
     decho("Loading bird image: " . $bird);
     $b1 = @imagecreatefromjpeg($bird);
     if ($b1 === FALSE) {
@@ -286,6 +286,8 @@ function add_bird($base, $bird, $w, $h, $x, $y) {
     }
     $b1 = scaler($b1, $w, $h);
     imagecopymerge($base, $b1, $x, $y, 0, 0, $w, $h, 100);
+    $borderimg = @imagecreatefrompng($border);
+    imagecopy($base, $borderimg, $x, $y, 0, 0, $w, $h);
 }
 
 function create_save_image($fn, $lat, $lon, $data_cache_key) {
@@ -326,9 +328,9 @@ function create_save_image($fn, $lat, $lon, $data_cache_key) {
     $base = scaler($base, $outw, $outh);
 
     // composite birds onto base image
-    add_bird($base, $birds[0]["image"], 200, 120, 300, 30);
-    add_bird($base, $birds[1]["image"], 200, 120, 133, 180);
-    add_bird($base, $birds[2]["image"], 200, 120, 466, 180);
+    add_bird($base, $birds[0]["image"], 200, 120, 300, 30, "decoration/coolasianframe.png");
+    add_bird($base, $birds[1]["image"], 200, 120, 133, 180, "decoration/simpleoldornateframe.png");
+    add_bird($base, $birds[2]["image"], 200, 120, 466, 180, "decoration/wonderfulcelcticdragons.png");
 
     // slogan
     $slogan = "HAPPY BIRDDAY";

@@ -48,7 +48,7 @@ $data = json_decode($data, true);
 
 <dl>
     <dt>Location:</dt>
-    <dd><?php echo $data["location"]; ?></dd>
+    <dd><?php echo $data["location"][0]; ?></dd>
     <dd>provided by <a href="https://51degrees.com">51Degrees</a></dd>
     <dt>Location imagery:</dt>
     <dd><a href="<?php echo $data["town"]; ?>">Local image</a></dd>
@@ -65,6 +65,7 @@ $data = json_decode($data, true);
     <dd>provided by <a href="<?php echo $data["xenourl"]; ?>">Xeno Canto</a></dd>
 </dl>
 <p><a href="birdday-card.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>">Show this birdday card</a></p>
+<p><a href="about.html">Learn about the birdday card app</a></p>
 </body>
 </html>
 
