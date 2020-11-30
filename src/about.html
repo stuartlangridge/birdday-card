@@ -54,11 +54,11 @@ body pre code[class*="language-"] {
     <li><a href="#geoloc">Geolocating a point to an address with 51Degrees</a></li>
     <li><a href="#placeimg">Finding an image for an address with Wikidata</a></li>
     <li><a href="#birds">Finding birds local to a location with Xeno Canto</a></li>
-    <li><a href="#bidspic">Finding pictures of birds</a></li>
+    <li><a href="#birdpic">Finding pictures of birds</a></li>
     <li><a href="#combine">Gluing it all together</a></li>
 </ol>
 
-<h2 id="geoloc">(geo l-)O Captain, my captain! -- geolocating a point <a href="#toc">&uarr;</a></h2>
+<h2 id="geoloc">(geo l-)O Captain, my captain! &mdash; geolocating a point <a href="#toc">&uarr;</a></h2>
 
 <p>Step 1 is to find a picture of a place. Well, we haven't got a place; what we've got is some coordinates for a spot on the earth, latitude and longitude. So step zero is to find which place that is. Looking up a geographical point and giving it a name is the task of <em>geolocation</em>, and it is not as easy as you might think. Sometimes it's simple enough: Big Ben is definitely in London, the Forbidden City is definitely in Beijing, and the Museu de Arte is in São Paulo. But which town is this field you've chosen closest to? What about the spot at the summit of Mount Kilimanjaro? If it's not near a town, which region is it in? Which language should the answer be in? So we have someone else do the heavy lifting on that particular point.</p>
 
@@ -138,7 +138,7 @@ if (!$country->hasValue) $country = null;
 
 <p>And with those in place, it's on to step 2.</p>
 
-<h2 id="placeimg">A thousand words -- picturing an address <a href="#toc">&uarr;</a></h2>
+<h2 id="placeimg">A thousand words &mdash; picturing an address <a href="#toc">&uarr;</a></h2>
 
 <p><a href="https://www.wikidata.org">Wikidata</a> is to structured data what Wikipedia is to human-readable knowledge: it's got everything. In particular, you can search for pretty much anything you can think of and then find all the knowledge that Wikidata has about that thing, carefully characterised by type. For our purposes, you can search for a place, and then look for a record of type "P18" attached to it, which in Wikidata-speak means "a picture of this thing". This means that we can search for our address from step 1, look at the result we get back, and if it contains a P18 record then we have a picture of that address. This is why we needed to look up the latitude and longitude to get a human-readable address &mdash; it gives us something to search for.</p>
 
@@ -190,7 +190,46 @@ if (!$country->hasValue) $country = null;
     <figcaption>The Winhall River in Vermont, in winter, looking pretty chilly if I'm honest</figcaption>
 </figure>
 
-<h2 id="birds">Four and twenty blackbirds baked in an API -- finding birds for a location <a href="#toc">&uarr;</a></h2>
+<h2 id="birds">Four and twenty blackbirds baked in an API &mdash; finding birds for a location <a href="#toc">&uarr;</a></h2>
+
+<p><a href="https://www.xeno-canto.org/">Xeno-Canto</a> bills itself as "Sharing bird sounds from around the world", and it's a really comprehensive crowd-sourced database of birdsong and bird calls from everywhere on Earth, searchable by latitude and longitude. So we can use it to find details of birds and their calls from our chosen point! They have an excellent <a href="https://www.xeno-canto.org/explore/api">API</a> which lets us do this programmatically, so let's dive in.</p>
+
+<p><a href="https://www.xeno-canto.org/api/2/recordings?query=lat:43.156702%20lon:-72.914178"><code>https://www.xeno-canto.org/ api/2/recordings?query= lat:43.156702 lon:-72.914178</code></a></p>
+
+<p>This returns comprehensive JSON listing recordings from the area: the first of which is of the Canada Goose, <em>branta canadensis</em>. The Latin will be relevant in a moment. This first record has relevant parts that look like this:</p>
+
+<pre><code class="language-json">
+{
+    "id":"72752",
+    "gen":"Branta",
+    "sp":"canadensis",
+    "en":"Canada Goose",
+    "rec":"Ezekiel S. Jakub",
+    "loc":"Turners Falls Canal, Massachusetts",
+    "lat":"42.593",
+    "lng":"-72.579",
+    "type":"Call",
+    "url":"\/\/www.xeno-canto.org\/72752",
+    "file":"\/\/www.xeno-canto.org\/72752\/download",
+}
+</code></pre>
+
+<p>so thank you Ezekiel S. Jakub for recording this Canada goose in Turners Falls. Here we have a link to <a href="http://www.xeno-canto.org/72752/download">the sound recording</a> directly, and also <a href="http://www.xeno-canto.org/72752">Xeno Canto's page about this recording of the Canada goose</a> which present all the details in human-readable form.</p>
+
+<h2 id="birdpic">See bird fly &mdash; finding pictures of birds <a href="#toc">&uarr;</a></h2>
+
+<p>We can of course use the same Wikidata trick we used for the town to find pictures of the birds as well. This is what the Latin classification is useful for: "Canada goose" might match other things, but <em>branta canadensis</em> will fairly unambiguously lead us to <a href="https://www.wikidata.org/wiki/Q26733">Wikidata's page on the Canada Goose</a>, which has pictures.</p>
+
+<h2 id="combine">The thing and the whole of the thing &mdash; gluing it all together <a href="#toc">&uarr;</a></h2>
+
+<p>What remains is to pull all this imagery and sound together into the classic of modern web design that you see before you to make a "birdday card". I'm not the person to advise on how to do that &mdash; you can see from the design that I am no designer. You'll find PHP's <a href="https://www.php.net/manual/en/function.imagecopy.php"><code>imagecopy()</code></a> function useful, though. The results are also cached; images once created are saved, and the results from API calls are also cached. This is important when you're using third-party APIs; you want to minimise the number of times you call them when you can, firstly because retrieving results you've already got is faster, and secondly because (especially with freely-provided data APIs such as xeno-canto) an increase in popularity on your side should not result in a crushing increase in load for them. So: cache your API calls!</p>
+
+<p>That's the birdday card, and how to pull together disparate API data into one thing on the web. Thank you to xeno-canto, wikimedia, and 51 Degrees for providing the data required to do this, and to Rachel Brooks Gleason for setting up a sanitarium which catered to upper-class women with what Wikipedia inexplicably refers to as "lady troubles", quotes included. And for fighting against slavery, obvs.</p>
+
+<figure>
+    <a href="birdday-card.php?lat=43.156702&amp;lon=-72.914178"><img src="img.php?lat=43.156702&amp;lon=-72.914178" alt="Rachel Brooks Gleason's birdday card, showing the Winhall river in Vermont and the Canada goose, the mute swan, and the wood duck."></a>
+    <figcaption>happy birdday Rachel from <a href="https://kryogenix.org">Stuart Langridge</a> and <a href="https://brucelawson.co.uk">Bruce Lawson</a>!</figcaption>
+</figure>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.22.0/components/prism-core.min.js"></script>
