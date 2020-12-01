@@ -6,11 +6,11 @@ list($lat, $lon, $data_cache_key) = validate();
 
 ?>
 
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
-<title>Birdday Card</title>
+<title>What three birds? - Birdday Card</title>
 <style>
 #card {
     background:
