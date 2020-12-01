@@ -31,12 +31,28 @@ list($lat, $lon, $data_cache_key) = validate();
     align-items: center;
     justify-content: center;
 }
+figure {
+    position: relative;
+    width: 90vw;
+    height: calc(90vw * 0.635);
+    background: url(decoration/Tropical-Foliage-Quadrilateral.png);
+    background-size: contain;
+}
+figure img {
+    position: absolute;
+    top: 19.64%;
+    left: 18.88%;
+    width: 57.1%;
+    height: 60.606%;
+}
 </style>
 </head>
 <body>
 <h1>Birdday Card</h1>
-<img id="card" src="img.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>"
-     alt="loading your card..." width="800" height="540" onerror="imgfail()" onload="imgsuccess()">
+<figure>
+    <img id="card" src="img.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>"
+         alt="loading your card..." width="800" height="540" onerror="imgfail()" onload="imgsuccess()">
+</figure>
 <div id="audios"></div>
 <p><a href="./">Make your own birdday card</a></p>
 <p><a href="details.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>">Learn about this birdday card</a></p>
