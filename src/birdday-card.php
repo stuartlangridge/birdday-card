@@ -12,20 +12,29 @@ list($lat, $lon, $data_cache_key) = validate();
 <meta charset="utf-8">
 <title>What three birds? - Birdday Card</title>
 <style>
+html {
+    background: #6dac8530;
+    min-height: 100vh;
+    font-family: Roboto, sans-serif;
+    padding: 1.5rem 0;
+    font-size: min(max(1rem, 4vw), 22px);
+}
+body {
+    padding-left: 1.5rem; padding-right: 1.5rem;
+}
+h1 {
+    color: #522D7E;
+    font-family: "Luckiest Guy", cursive;
+    font-size: 2rem;
+    line-height: 2rem;
+    margin-top: calc((1.5rem - 2rem) + 1.5rem);
+    margin-bottom: 1.5rem;
+    font-size: min(max(1rem, 8vw), 60px);
+    text-align: center;
+    text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+}
 #card {
-    background:
-        radial-gradient(hsl(0, 100%, 27%) 4%, hsl(0, 100%, 18%) 9%, hsla(0, 100%, 20%, 0) 9%) 0 0,
-        radial-gradient(hsl(0, 100%, 27%) 4%, hsl(0, 100%, 18%) 8%, hsla(0, 100%, 20%, 0) 10%) 50px 50px,
-        radial-gradient(hsla(0, 100%, 30%, 0.8) 20%, hsla(0, 100%, 20%, 0)) 50px 0,
-        radial-gradient(hsla(0, 100%, 30%, 0.8) 20%, hsla(0, 100%, 20%, 0)) 0 50px,
-        radial-gradient(hsla(0, 100%, 20%, 1) 35%, hsla(0, 100%, 20%, 0) 60%) 50px 0,
-        radial-gradient(hsla(0, 100%, 20%, 1) 35%, hsla(0, 100%, 20%, 0) 60%) 100px 50px,
-        radial-gradient(hsla(0, 100%, 15%, 0.7), hsla(0, 100%, 20%, 0)) 0 0,
-        radial-gradient(hsla(0, 100%, 15%, 0.7), hsla(0, 100%, 20%, 0)) 50px 50px,
-        linear-gradient(45deg, hsla(0, 100%, 20%, 0) 49%, hsla(0, 100%, 0%, 1) 50%, hsla(0, 100%, 20%, 0) 70%) 0 0,
-        linear-gradient(-45deg, hsla(0, 100%, 20%, 0) 49%, hsla(0, 100%, 0%, 1) 50%, hsla(0, 100%, 20%, 0) 70%) 0 0;
-    background-color: #300;
-    background-size: 100px 100px;
+    background: #6dac85;
     color: white;
     display: flex;
     align-items: center;
@@ -45,18 +54,28 @@ figure img {
     width: 57.1%;
     height: 60.606%;
 }
+figure::after {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    top: 19.64%;
+    left: 18.88%;
+    width: 57.1%;
+    height: 60.606%;
+    box-shadow: inset 0px 0px 50px #6dac85;
+}
 </style>
 </head>
 <body>
-<h1>Birdday Card</h1>
+<h1>What Three Birds?</h1>
 <figure>
     <img id="card" src="img.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>"
          alt="loading your card..." width="800" height="540" onerror="imgfail()" onload="imgsuccess()">
 </figure>
 <div id="audios"></div>
-<p><a href="./">Make your own birdday card</a></p>
+<p><a href="./">Make your own “birdday card”</a></p>
 <p><a href="details.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>">Learn about this birdday card</a></p>
-<p><a href="about.html">Learn about the birdday card app</a></p>
+<p><a href="about.html">Learn about <strong>What Three Birds?™&copy;&reg;</strong> and how it works</a></p>
 <script>
 function imgfail() {
     console.log("image didn't load. Do something relevant.");

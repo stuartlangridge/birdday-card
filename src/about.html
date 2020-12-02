@@ -35,6 +35,7 @@ p {
 body pre code[class*="language-"] {
     font-size: min(2.5vw, 1em);
 }
+figure { text-align: center; }
 </style>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.22.0/themes/prism.css" rel="stylesheet" />
 </head>
@@ -42,7 +43,7 @@ body pre code[class*="language-"] {
 </head>
 <body>
 
-<h1>About the “<a href="./">Your Birdday Card!</a>” app</h1>
+<h1>About the “<a href="./">What Three Birds?™&copy;&reg;</a>” app</h1>
 
 <p>So, what’s this all about?</p>
 
@@ -148,8 +149,7 @@ if (!$country->hasValue) $country = null;
 
 <p>That does indeed return us a result! The relevant part is this:</p>
 
-<pre><code class="language-json">
-    {
+<pre><code class="language-json">    {
         "title":"Q8025343",
         "pageid":7971580,
         "timestamp":"2020-01-11T18:30:56Z"
@@ -162,8 +162,7 @@ if (!$country->hasValue) $country = null;
 
 <p>and <em>that</em> has all the info we need. In particular, there’s a <code>claims.P18</code> record:</p>
 
-<pre><code class="language-json">
-    "P18": [
+<pre><code class="language-json">    "P18": [
         {
             "mainsnak": {
                 "snaktype": "value",
@@ -198,8 +197,7 @@ if (!$country->hasValue) $country = null;
 
 <p>This returns comprehensive JSON listing recordings from the area: the first of which is of the Canada Goose, <em>branta canadensis</em>. The Latin will be relevant in a moment. This first record has relevant parts that look like this:</p>
 
-<pre><code class="language-json">
-{
+<pre><code class="language-json">{
     "id":"72752",
     "gen":"Branta",
     "sp":"canadensis",
@@ -224,7 +222,7 @@ if (!$country->hasValue) $country = null;
 
 <p>What remains is to pull all this imagery and sound together into the classic of modern web design that you see before you to make a "birdday card". I’m not the person to advise on how to do that &mdash; you can see from the design that I am no designer. You’ll find PHP’s <a href="https://www.php.net/manual/en/function.imagecopy.php"><code>imagecopy()</code></a> function useful, though. The results are also cached; images once created are saved, and the results from API calls are also cached. This is important when you’re using third-party APIs; you want to minimise the number of times you call them when you can, firstly because retrieving results you’ve already got is faster, and secondly because (especially with freely-provided data APIs such as xeno-canto) an increase in popularity on your side should not result in a crushing increase in load for them. So: cache your API calls!</p>
 
-<p>That’s the birdday card, and how to pull together disparate API data into one thing on the web. Thank you to xeno-canto, wikimedia, and 51 Degrees for providing the data required to do this, and to Rachel Brooks Gleason for setting up a sanitarium which catered to upper-class women with what Wikipedia inexplicably refers to as “lady troubles”, the quotes being theirs. And for fighting against slavery, obvs.</p>
+<p>That’s the birdday card, and how to pull together disparate API data into one thing on the web. Thank you to xeno-canto, wikimedia, and 51 Degrees for providing the data required to do this, and to Rachel Brooks Gleason for setting up a sanitarium which catered to upper-class women with what Wikipedia inexplicably refers to as “lady troubles”, the quotes being theirs. And for fighting against slavery, obvs. All of the trademark symbols are lies, too, as if you couldn't guess.</p>
 
 <figure>
     <a href="birdday-card.php?lat=43.156702&amp;lon=-72.914178"><img src="img.php?lat=43.156702&amp;lon=-72.914178" alt="Rachel Brooks Gleason’s birdday card, showing the Winhall river in Vermont and the Canada goose, the mute swan, and the wood duck."></a>
