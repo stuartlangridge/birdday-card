@@ -99,25 +99,25 @@ function geoloc51d($lat, $lon) {
     $names = array();
 
     if ($town && $region && $state && $country) {
-        $names[] = [join([$town->value, $region->value, $state->value, $country->value], ", "), "town+region+state+country"];
+        $names[] = [join(", ", [$town->value, $region->value, $state->value, $country->value]), "town+region+state+country"];
     }
     if ($town && $region && $country) {
-        $names[] = [join([$town->value, $region->value, $country->value], ", "), "town+region+country"];
+        $names[] = [join(", ", [$town->value, $region->value, $country->value]), "town+region+country"];
     }
     if ($town && $state && $country) {
-        $names[] = [join([$town->value, $state->value, $country->value], ", "), "town+state+country"];
+        $names[] = [join(", ", [$town->value, $state->value, $country->value]), "town+state+country"];
     }
     if ($region && $state && $country) {
-        $names[] = [join([$region->value, $state->value, $country->value], ", "), "region+state+country"];
+        $names[] = [join(", ", [$region->value, $state->value, $country->value]), "region+state+country"];
     }
     if ($town && $country) {
-        $names[] = [join([$town->value, $country->value], ", "), "town+country"];
+        $names[] = [join(", ", [$town->value, $country->value]), "town+country"];
     }
     if ($region && $country) {
-        $names[] = [join([$region->value, $country->value], ", "), "region+country"];
+        $names[] = [join(", ", [$region->value, $country->value]), "region+country"];
     }
     if ($state && $country) {
-        $names[] = [join([$state->value, $country->value], ", "), "state+country"];
+        $names[] = [join(", ", [$state->value, $country->value]), "state+country"];
     }
     if ($country) {
         $names[] = [$country->value, "country"];
@@ -261,7 +261,7 @@ function scaler($im, $w, $h) {
     }
     decho("Scaling image from $origw $origh to $nw $nh to be bigger than $w $h");
     $n = imagescale($im, $nw, $nh);
-    decho("Scaled image $im to new handle $n");
+    decho("Scaled image to new handle");
     if ($n === FALSE) {
         decho("Image scale failed!");
     }
@@ -297,7 +297,7 @@ function create_save_image($fn, $lat, $lon, $data_cache_key) {
     foreach ($loc_descriptions as $tn) {
         $loc_descriptions_combined[] = $tn[0];
     }
-    $loc_descriptions_combined = join($loc_descriptions_combined, " | ");
+    $loc_descriptions_combined = join(" | ", $loc_descriptions_combined);
     decho("Location descriptions are $loc_descriptions_combined");
     list($image_url, $townurl) = wikidata_image($loc_descriptions, 1000);
     decho("Base image URL is $image_url");
@@ -324,7 +324,7 @@ function create_save_image($fn, $lat, $lon, $data_cache_key) {
     }
 
     // Scale base image to our desired size
-    decho("Scaling base image $image_url handle $base to size $outw $outh");
+    decho("Scaling base image $image_url to size $outw $outh");
     $base = scaler($base, $outw, $outh);
 
     // composite birds onto base image

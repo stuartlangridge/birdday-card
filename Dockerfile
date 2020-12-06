@@ -1,4 +1,4 @@
-FROM php:7.4-apache
+FROM php:8-apache
 COPY src/ /var/www/html/
 
 ENV RESOURCEKEY=AQQNRUQFJWB2xxWO2Eg
