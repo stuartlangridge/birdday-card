@@ -341,7 +341,7 @@ function create_save_image($fn, $lat, $lon, $data_cache_key) {
 
     // slogan
     $slogan = "HAPPY BIRDDAY";
-    $font = "bettynoir.ttf";
+    $font = dirname(__FILE__) . "/bettynoir.ttf";
     $distance_from_bottom = 0;
     $fontsize = 80;
     $col = imagecolorallocate ($base, 255, 255, 0);
