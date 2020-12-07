@@ -87,10 +87,10 @@ function geoloc51d($lat, $lon) {
     try { $state = $flowData->location->state; } catch(Exception $e) {}
     try { $country = $flowData->location->country; } catch(Exception $e) {}
 
-    if (!$town->hasValue) $town = null;
-    if (!$region->hasValue) $region = null;
-    if (!$state->hasValue) $state = null;
-    if (!$country->hasValue) $country = null;
+    if (!$town || !$town->hasValue) $town = null;
+    if (!$region || !$region->hasValue) $region = null;
+    if (!$state || !$state->hasValue) $state = null;
+    if (!$country || !$country->hasValue) $country = null;
 
     // names we use to look for imagery, falling back to the next one if one has no image or no search result
     // only include a name if all parts of it are present
@@ -178,7 +178,7 @@ function wikidata_image($text_array, $width) {
     // an image is claim type P18, in wikidata language
     // a banner image is claim type P948, which we check for as well
     try {
-        $imgname = $wdo["entities"][$entityid]["claims"]["P18"][0]["mainsnak"]["datavalue"]["value"];
+        @$imgname = $wdo["entities"][$entityid]["claims"]["P18"][0]["mainsnak"]["datavalue"]["value"];
     } catch(Exception $e) {
         decho("Couldn't find an image entry for $item so trying with next one");
         \array_splice($text_array, 0, 1);
@@ -187,7 +187,7 @@ function wikidata_image($text_array, $width) {
     if (!$imgname) {
         try {
             decho("Looking for page banner image because no image was found");
-            $imgname = $wdo["entities"][$entityid]["claims"]["P948"][0]["mainsnak"]["datavalue"]["value"];
+            @$imgname = $wdo["entities"][$entityid]["claims"]["P948"][0]["mainsnak"]["datavalue"]["value"];
         } catch(Exception $e) {
             decho("Couldn't find an image entry for $item so trying with next one");
             \array_splice($text_array, 0, 1);
