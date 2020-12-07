@@ -328,9 +328,16 @@ function create_save_image($fn, $lat, $lon, $data_cache_key) {
     $base = scaler($base, $outw, $outh);
 
     // composite birds onto base image
-    add_bird($base, $birds[0]["image"], 200, 120, 300, 30, "decoration/coolasianframe.png");
-    add_bird($base, $birds[1]["image"], 200, 120, 133, 180, "decoration/simpleoldornateframe.png");
-    add_bird($base, $birds[2]["image"], 200, 120, 466, 180, "decoration/wonderfulcelcticdragons.png");
+    switch (count($birds)) {
+        case 3:
+            add_bird($base, $birds[2]["image"], 200, 120, 466, 180, "decoration/wonderfulcelcticdragons.png");
+        case 2:
+            add_bird($base, $birds[1]["image"], 200, 120, 133, 180, "decoration/simpleoldornateframe.png");
+        case 1:
+            add_bird($base, $birds[0]["image"], 200, 120, 300, 30, "decoration/coolasianframe.png");
+        default:
+            break;
+    }
 
     // slogan
     $slogan = "HAPPY BIRDDAY";
