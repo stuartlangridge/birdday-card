@@ -71,7 +71,7 @@ function geoloc51d($lat, $lon) {
         return json_decode($cached_locations);
     }
 
-    $resourceKey = $_ENV["RESOURCEKEY"];
+    $resourceKey = getenv("RESOURCEKEY");
     $settings = array("resourceKey" => $resourceKey, "locationProvider" => "fiftyonedegrees");
     $builder = new GeoLocationPipelineBuilder($settings);
     $pipeline = $builder->build();
