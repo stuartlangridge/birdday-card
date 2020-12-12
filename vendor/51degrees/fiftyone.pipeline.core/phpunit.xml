@@ -1,0 +1,9 @@
+<phpunit>
+  <testsuites>
+    <testsuite name="Tests">
+      <file>tests/core.php</file>
+      <file>tests/examples.php</file>
+      <file>tests/javascriptBuilderTests.php</file>
+    </testsuite>
+  </testsuites>
+</phpunit>

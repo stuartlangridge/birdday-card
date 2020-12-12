@@ -1,0 +1,10 @@
+<phpunit>
+  <php>
+    <env name="RESOURCEKEY" value="!!YOUR_RESOURCE_KEY!!"/>
+  </php>
+  <testsuites>
+    <testsuite name="Tests">
+      <file>fiftyone.pipeline.geolocation/examples/index.php</file>
+    </testsuite>
+  </testsuites>
+</phpunit>
