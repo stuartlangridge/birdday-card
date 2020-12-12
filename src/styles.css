@@ -1,69 +1,85 @@
 html {
-	background: #FBD1E5;
-    min-height: 100vh;
-    font-family: Roboto, sans-serif;
-    padding: 1.5rem 0;
-    font-size: min(max(1rem, 4vw), 22px);
+  background: #fbd1e5;
+  min-height: 100vh;
+  font-family: Roboto, sans-serif;
+  padding: 1.5rem 0;
+  font-size: min(max(1rem, 4vw), 22px);
 }
 
-body {background:url(/styles/birdtile.png);}
+body {
+  background: url(/styles/birdtile.png);
+}
 
-header {background: #FBD1E5;}
+header,
+footer {
+  background: #fbd1e5;
+}
 
 main {
-	background: #FBD1E5;
-    padding: 0;
-	margin: 0 auto;
-	max-width: 39.3em;
+  background: #fbd1e5;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 39.3em;
 }
 
-body>*:not(#themap) {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+footer {
+  height: 3em;
+  padding-top: 1em;
+  text-align: center;
 }
 
+body > *:not(#themap) {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
 
 h1 {
-    color: #522D7E;
-    font-family: "Luckiest Guy", cursive;
-    font-size: 2rem;
-    margin-top: calc((1.5rem - 2rem) + 1.5rem);
-    margin-bottom: 1.5rem;
-    font-size: min(max(1rem, 8vw), 60px);
-    text-align: center;
-    /*vertically centre text */
-    height: 5em;
-    line-height: 5em;
-    background: url(/styles/header-bg.svg) 1em top no-repeat;
-    background-size: contain;
-    text-shadow: 2px 2px 2px white;
-    padding-left: 2em;
+  color: #522d7e;
+  font-family: "Luckiest Guy", cursive;
+  font-size: 2rem;
+  margin-top: calc((1.5rem - 2rem) + 1.5rem);
+  margin-bottom: 1.5rem;
+  font-size: min(max(1rem, 8vw), 60px);
+  text-align: center;
+  /*vertically centre text */
+  height: 5em;
+  line-height: 5em;
+  background: url(/styles/header-bg.svg) 1em top no-repeat;
+  background-size: contain;
+  text-shadow: 2px 2px 2px white;
+  padding-left: 2em;
 }
 
 h1 span {
-    font-size: 3em;
-    color: red;
-    text-shadow: 2px 2px 2px black;
+  font-size: 3em;
+  color: red;
+  text-shadow: 2px 2px 2px black;
 }
 
 p {
-    line-height: 1.5rem;
-    margin-bottom: 1.5rem;
+  line-height: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+p.cta {
+  font-size: 1.2em;
+  line-height: 1.4rem;
+  text-align: center;
 }
 
 /* https://css-tricks.com/snippets/css/prevent-superscripts-and-subscripts-from-affecting-line-height/ */
 sup,
 sub {
-    vertical-align: baseline;
-    position: relative;
-    top: -0.4em;
+  vertical-align: baseline;
+  position: relative;
+  top: -0.4em;
 }
 
 sub {
-    top: 0.4em;
+  top: 0.4em;
 }
 
 #themap {
-    height: 400px;
-    filter: sepia(80%) hue-rotate(260deg);
+  height: 400px;
+  filter: sepia(80%) hue-rotate(260deg);
 }
