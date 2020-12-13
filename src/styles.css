@@ -68,18 +68,20 @@ p.cta {
 }
 
 /* https://css-tricks.com/snippets/css/prevent-superscripts-and-subscripts-from-affecting-line-height/ */
-sup,
-sub {
+sup
+ {
   vertical-align: baseline;
   position: relative;
   top: -0.4em;
 }
 
-sub {
-  top: 0.4em;
-}
 
 #themap {
   height: 400px;
   filter: sepia(80%) hue-rotate(260deg);
 }
+
+body pre code[class*="language-"] {
+    font-size: min(2.5vw, 1em);
+}
+figure { text-align: center; font-size: small; }

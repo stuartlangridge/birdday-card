@@ -11,28 +11,9 @@ list($lat, $lon, $data_cache_key) = validate();
 <head>
 <meta charset="utf-8">
 <title>What three birds? - Birdday Card</title>
+<link rel="stylesheet" href="styles.css">
 <style>
-html {
-    background: #6dac8530;
-    min-height: 100vh;
-    font-family: Roboto, sans-serif;
-    padding: 1.5rem 0;
-    font-size: min(max(1rem, 4vw), 22px);
-}
-body {
-    padding-left: 1.5rem; padding-right: 1.5rem;
-}
-h1 {
-    color: #522D7E;
-    font-family: "Luckiest Guy", cursive;
-    font-size: 2rem;
-    line-height: 2rem;
-    margin-top: calc((1.5rem - 2rem) + 1.5rem);
-    margin-bottom: 1.5rem;
-    font-size: min(max(1rem, 8vw), 60px);
-    text-align: center;
-    text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
-}
+
 #card {
     background: #6dac85;
     color: white;
@@ -44,9 +25,10 @@ figure {
     position: relative;
     width: 90vw;
     height: calc(90vw * 0.635);
-    background: url(decoration/Tropical-Foliage-Quadrilateral.png);
+ /*   background: url(decoration/Tropical-Foliage-Quadrilateral.png); */
     background-size: contain;
 }
+/*
 figure img {
     position: absolute;
     top: 19.64%;
@@ -64,10 +46,14 @@ figure::after {
     height: 60.606%;
     box-shadow: inset 0px 0px 50px #6dac85;
 }
+*/
 </style>
 </head>
 <body>
+	<header>
 <h1>What Three Birds?</h1>
+</header>
+<main>
 <figure>
     <img id="card" src="img.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>"
          alt="loading your card..." width="800" height="540" onerror="imgfail()" onload="imgsuccess()">
@@ -76,6 +62,12 @@ figure::after {
 <p><a href="./">Make your own “birdday card”</a></p>
 <p><a href="details.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>">Learn about this birdday card</a></p>
 <p><a href="about.html">Learn about <strong>What Three Birds?™&copy;&reg;</strong> and how it works</a></p>
+</main>
+<footer><small>Made by <a href="https://kryogenix.org/">Stuart Langridge</a> (<a
+	href="https://twitter.com/sil">@sil</a>) and <a href="https://brucelawson.co.uk">Bruce Lawson</a> (<a
+	href="https://twitter.com/brucel">@brucel</a>). The header drawing is by <a
+	href="https://openclipart.org/detail/219787/owl-and-a-birds">Rones</a>. Not many birds were harmed during the coding of this website (Bruce ate a chicken sandwich while writing the CSS). Source is on Github, licensed under the <a href="https://web.archive.org/web/20140924010836/http://wiseearthpublishers.com/sites/wiseearthpublishers.com/files/PeacefulOSL.txt">Peaceful Open Source License</a>.</small>
+</footer>
 <script>
 function imgfail() {
     console.log("image didn't load. Do something relevant.");
