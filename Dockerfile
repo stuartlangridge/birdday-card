@@ -26,3 +26,5 @@ RUN mkdir /var/www/images
 RUN chmod a+rwx /var/www/images
 RUN mkdir /var/www/cache
 RUN chmod a+rwx /var/www/cache
+
+EXPOSE 80
