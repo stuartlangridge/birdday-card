@@ -15,8 +15,8 @@ list($lat, $lon, $data_cache_key) = validate();
 <style>
 
 #card {
-    background: #6dac85;
-    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    color: black;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -27,6 +27,8 @@ figure {
     height: calc(90vw * 0.635);
  /*   background: url(decoration/Tropical-Foliage-Quadrilateral.png); */
     background-size: contain;
+    overflow: hidden;
+    clip-path: polygon(0 0, 800px 0, 800px 100%, 0 100%);
 }
 /*
 figure img {
@@ -47,6 +49,33 @@ figure::after {
     box-shadow: inset 0px 0px 50px #6dac85;
 }
 */
+figure::before, figure::after {
+    content: "";
+    background-image: url(decoration/bird-cells.svg);
+    background-size: auto 100%;
+    width: 800px;
+    clip-path: polygon(0 0, 88px 0, 88px 125px, 0 125px);
+    height: 125px;
+    will-change: background-position;
+    animation-name: fly-cycle, scrolldown;
+    animation-timing-function: steps(10), linear;
+    animation-duration: 1s, 2.8s;
+    animation-iteration-count: infinite, infinite;
+    position: absolute;
+    top: 160px;
+    left: 0;
+    background-color: transparent;
+    z-index: -1;
+}
+figure::after {
+    top: 400px
+    animation-delay: 0.2s, -0.6s;
+    animation-duration: 0.51s, 2.3s;
+    animation-name: fly-cycle, scrollup;
+}
+@keyframes fly-cycle { 100% { background-position: -900px 0; } }
+@keyframes scrollup { 0% { transform: translateX(-88px); } 100% { transform: translateX(100%) translateY(-150%); } }
+@keyframes scrolldown { 0% { transform: translateX(-88px); } 100% { transform: translateX(100%) translateY(150%); } }
 </style>
 </head>
 <body>
