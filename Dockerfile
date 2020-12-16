@@ -12,6 +12,8 @@ RUN apt-get update \
   libpng-dev \
   && rm -rf /var/lib/apt/lists/*
 
+EXPOSE 80
+
 # GD
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
   && docker-php-ext-install -j "$(nproc)" gd
@@ -26,5 +28,3 @@ RUN mkdir /var/www/images
 RUN chmod a+rwx /var/www/images
 RUN mkdir /var/www/cache
 RUN chmod a+rwx /var/www/cache
-
-EXPOSE 80
