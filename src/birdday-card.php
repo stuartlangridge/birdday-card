@@ -114,17 +114,21 @@ async function imgsuccess() {
             return;
         }
         const audios = await response.json();
-        const container = document.getElementById("audios");
+        console.log("got audios", audios);
+        const all_container = document.getElementById("audios");
         audios.forEach(adata => {
+            const bird_container = document.createElement("div");
             const audio = document.createElement("audio");
-            const acontainer = document.createElement("div");
-            const span = document.createElement("span");
+            const img = document.createElement("img");
+            const species_name = document.createElement("span");
             audio.controls = true;
             audio.src = adata.src;
-            span.append(adata.species);
-            acontainer.append(span);
-            acontainer.append(audio);
-            container.append(acontainer);
+            img.src = "birdimg.php?s=" + encodeURIComponent(adata.species);
+            species_name.append(adata.species);
+            bird_container.append(species_name);
+            bird_container.append(audio);
+            bird_container.append(img);
+            all_container.append(bird_container);
         })
     } catch(e) {
         console.log("Error fetching audios, so ignoring.", e);
