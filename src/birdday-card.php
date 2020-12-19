@@ -25,7 +25,6 @@ figure {
     position: relative;
     width: 90vw;
     height: calc(90vw * 0.635);
- /*   background: url(decoration/Tropical-Foliage-Quadrilateral.png); */
     background-size: contain;
     overflow: hidden;
     clip-path: polygon(0 0, 800px 0, 800px 100%, 0 100%);
@@ -76,6 +75,27 @@ figure::after {
 @keyframes fly-cycle { 100% { background-position: -900px 0; } }
 @keyframes scrollup { 0% { transform: translateX(-88px); } 100% { transform: translateX(100%) translateY(-150%); } }
 @keyframes scrolldown { 0% { transform: translateX(-88px); } 100% { transform: translateX(100%) translateY(150%); } }
+
+/* loading spinner */
+
+figure[aria-busy="true"] div::before {content:"loading";}
+
+@media screen and not (prefers-reduced-motion) {
+
+	figure[aria-busy="true"] div::before {content:"";}
+	figure[aria-busy="true"] div {height:30%;padding-top:50%;background-image:url("/styles/Wicked-bird-by-Rones.svg");
+	background-size:contain; background-repeat:no-repeat; background-position: center center;
+	animation: spin 2s infinite;
+}
+
+	@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
 </style>
 </head>
 <body>
@@ -83,7 +103,7 @@ figure::after {
 <h1>What Three Birds?</h1>
 </header>
 <main>
-<figure>
+<figure aria-busy="true">
     <img id="card" src="img.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>"
          alt="loading your card..." width="800" height="540" onerror="imgfail()" onload="imgsuccess()">
 </figure>
