@@ -104,8 +104,10 @@ figure[aria-busy="true"] div::before {content:"loading";}
 </header>
 <main>
 <figure aria-busy="true">
+<div>
     <img id="card" src="img.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>"
          alt="loading your card..." width="800" height="540" onerror="imgfail()" onload="imgsuccess()">
+</div>
 </figure>
 <div id="audios"></div>
 <p><a href="./">Make your own “birdday card”</a></p>
