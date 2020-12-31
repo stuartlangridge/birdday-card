@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>What three birds?</title>
+	<title>Which Three birds?</title>
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
 		integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
 		crossorigin="" />
@@ -14,14 +14,14 @@
 
 <body>
 	<header>
-		<h1>What <span>3</span> birds?</h1>
+		<h1>Which <span>3</span> birds?</h1>
 	</header>
 	<main>
 
 
 		<p>Many web services divide the world up into small areas that can be referenced by a small set of mnemonics
 			that is
-			 memorable and easily communicable, to <a
+			memorable and easily communicable, to <a
 				href="https://www.bbc.co.uk/news/uk-scotland-highlands-islands-51447226">emergency services</a> (for
 			example). But they all suffer from arbitrary-association syndrome. <a
 				href="https://what3emojis.com/map/#18/51.49182/-0.03819">What3emojis</a> advertises itself as "a radical
@@ -31,24 +31,27 @@
 			associate latitude 19.6968708, longitude 96.1249349 with "🔳🏰💭"? There is no reason. Also, there are only
 			<a href="https://github.com/BadIdeaFactory/what3emojis/issues/1">1407 emojis</a>, so 1407<sup>3</sup> gives
 			you
-			a paltry 2,785,366,143 addresses.</p>
-		<p>What Three Birds?™©® has neither of these deficiencies. There are an <a
+			a paltry 2,785,366,143 addresses.
+		</p>
+		<p>Which Three Birds?™©® has neither of these deficiencies. There are an <a
 				href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0166307">estimated 18,043
 				species of birds</a> worldwide, so three birds gives us 5,873,895,925,507 different addresses—enough to
-			map the entire Virgo Supercluster!<a id="fn1" href="#fnr1"><sup>1</sup></a> Not only is this <b>new web standard</b><a
-			id="fn2" href="#fnr2"><sup>2</sup></a> (based on our patented<a
-				id="fn3" href="#fnr3"><sup>3</sup></a>—and aggressively protected— Avian-Cartography® system<a id="fn4"
-				href="#fnr4"><sup>4</sup></a>) <b>future-proof</b>, it is also <b>non-arbitrary</b>: we choose the most common three
+			map the entire Virgo Supercluster!<a id="fn1" href="#fnr1"><sup>1</sup></a> Not only is this <b>new web
+				standard</b><a id="fn2" href="#fnr2"><sup>2</sup></a> (based on our patented<a id="fn3"
+				href="#fnr3"><sup>3</sup></a>—and aggressively protected— Avian-Cartography® system<a id="fn4"
+				href="#fnr4"><sup>4</sup></a>) <b>future-proof</b>, it is also <b>non-arbitrary</b>: we choose the most
+			common three
 			birds nearest to the location they map to. This means that you don‘t even need an internet connection to
 			tell emergency services where you are<a id="fn5" href="#fnr5"><sup>5</sup></a>, just a pair of binoculars
 			and an encyclopaedic knowledge of ornithology! So, zoom the map in to your location (or a friend‘s!) and
-			find out&hellip;<b>What Three Birds?</b></p>
+			find out&hellip;<b>Which Three Birds?</b></p>
 
 		<ol>
 			<li id="fnr1"><small>probably</small> <a aria-label="return to text" href="#fn1">&uarr;</a></li>
-			<li id="fnr2"><small>It’s been fast-tracked by the W3B under the Directorship of our old friend Tit Budgie-Lee who owes us a favour</small> <a aria-label="return to text" href="#fn2">&uarr;</a></li>
-			<li id="fnr3"><small>not really; it‘s free, or <a href="about.html">open data</a> <a aria-label="return to text"
-						href="#fn3">&uarr;</a></small>
+			<li id="fnr2"><small>It’s been fast-tracked by the W3B under the Directorship of our old friend Tit
+					Budgie-Lee who owes us a favour</small> <a aria-label="return to text" href="#fn2">&uarr;</a></li>
+			<li id="fnr3"><small>not really; it‘s free, or <a href="about.html">open data</a> <a
+						aria-label="return to text" href="#fn3">&uarr;</a></small>
 			<li id="fnr4"><small>so named after company founders Stuart Langridge and Bruce Lawson, who on entering a
 					room often are hailed with “look, there‘s Avian-Car” <a aria-label="return to text"
 						href="#fn4">&uarr;</a></small>
@@ -59,9 +62,13 @@
 		<div id="themap"></div>
 
 		<form action="birdday-card.php">
-			<label for="lat">Latitude: </label><input type="number" step="any" name="lat" id="lat" required>
-			<label for="lon">Longitude: </label><input type="number" step="any" name="lon" id="lon" required>
-			<input type="submit" value="What Three Birds?">
+			<div>
+				<label for="lat">Latitude: </label><input type="number" step="any" name="lat" id="lat" required>
+			</div>
+			<div>
+				<label for="lon">Longitude: </label><input type="number" step="any" name="lon" id="lon" required>
+			</div>
+			<input type="submit" value="Which Three Birds?">
 		</form>
 
 		<p class="cta"><a href="about.html">Learn about the Birdday card App</a></p>
@@ -69,7 +76,11 @@
 	<footer><small>Made by <a href="https://kryogenix.org/">Stuart Langridge</a> (<a
 				href="https://twitter.com/sil">@sil</a>) and <a href="https://brucelawson.co.uk">Bruce Lawson</a> (<a
 				href="https://twitter.com/brucel">@brucel</a>). The header drawing is by <a
-				href="https://openclipart.org/detail/219787/owl-and-a-birds">Rones</a>. Not many birds were harmed during the coding of this website (Bruce ate a chicken sandwich while writing the CSS). Source is on Github, licensed under the <a href="https://web.archive.org/web/20140924010836/http://wiseearthpublishers.com/sites/wiseearthpublishers.com/files/PeacefulOSL.txt">Peaceful Open Source License</a>.</small>
+				href="https://openclipart.org/detail/219787/owl-and-a-birds">Rones</a>. Not many birds were harmed
+			during the coding of this website (Bruce ate a chicken sandwich while writing the CSS). Source is on Github,
+			licensed under the <a
+				href="https://web.archive.org/web/20140924010836/http://wiseearthpublishers.com/sites/wiseearthpublishers.com/files/PeacefulOSL.txt">Peaceful
+				Open Source License</a>.</small>
 	</footer>
 	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
 		integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="

@@ -10,7 +10,7 @@ list($lat, $lon, $data_cache_key) = validate();
 <html>
 <head>
 <meta charset="utf-8">
-<title>What three birds? - Birdday Card</title>
+<title>Which Three birds? - Birdday Card</title>
 <link rel="stylesheet" href="styles.css">
 <style>
 
@@ -101,7 +101,7 @@ figure[aria-busy="true"] div::before {content:"loading";}
 </head>
 <body>
 	<header>
-<h1>What Three Birds?</h1>
+<h1>Which Three Birds?</h1>
 </header>
 <main>
 <figure aria-busy="true">
@@ -112,7 +112,7 @@ figure[aria-busy="true"] div::before {content:"loading";}
 <div id="audios"></div>
 <p><a href="./">Make your own “birdday card”</a></p>
 <p><a href="details.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>">Learn about this birdday card</a></p>
-<p><a href="about.html">Learn about <strong>What Three Birds?™&copy;&reg;</strong> and how it works</a></p>
+<p><a href="about.html">Learn about <strong>Which Three Birds?™&copy;&reg;</strong> and how it works</a></p>
 </main>
 <footer><small>Made by <a href="https://kryogenix.org/">Stuart Langridge</a> (<a
 	href="https://twitter.com/sil">@sil</a>) and <a href="https://brucelawson.co.uk">Bruce Lawson</a> (<a
@@ -142,14 +142,15 @@ async function imgsuccess() {
             const bird_container = document.createElement("div");
             const audio = document.createElement("audio");
             const img = document.createElement("img");
-            const species_name = document.createElement("span");
+            const species_name = document.createElement("p");
             audio.controls = true;
             audio.src = adata.src;
-            img.src = "birdimg.php?s=" + encodeURIComponent(adata.species);
+			img.src = "birdimg.php?s=" + encodeURIComponent(adata.species);
+			img.alt ="a bird.";
             species_name.append(adata.species);
-            bird_container.append(species_name);
-            bird_container.append(audio);
-            bird_container.append(img);
+			bird_container.append(img);
+			bird_container.append(audio);
+			bird_container.append(species_name);
             all_container.append(bird_container);
         })
     } catch(e) {
