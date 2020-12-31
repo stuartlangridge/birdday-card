@@ -11,7 +11,9 @@ list($lat, $lon, $data_cache_key) = validate();
 
 <head>
     <meta charset="utf-8">
-    <title>Which 3 Birdies? - Birdday Card</title>
+	<title>Which 3 Birdies? - Birdday Card</title>
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
     #card {
@@ -118,12 +120,12 @@ figure::after {
         }
 
         figure[aria-busy="true"] div {
-            height: 30%;
-            padding-top: 50%;
+   /*         height: 30%;
+            padding-top: 50%; */
             background-image: url("/styles/Wicked-bird-by-Rones.svg");
-            background-size: contain;
+            background-size: 400px;
             background-repeat: no-repeat;
-            background-position: center center;
+            background-position: left center;
             animation: spin 2s infinite;
         }
 
