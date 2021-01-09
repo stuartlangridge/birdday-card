@@ -1,23 +1,22 @@
 html {
   background: #fbd1e5;
-  min-height: 100vh;
+/*  min-height: 100vh; */
   font-family: Roboto, sans-serif;
-  padding: 1.5rem 0;
-  font-size: min(max(1rem, 4vw), 22px);
+	font-size: min(max(1rem, 4vw), 22px);
 }
 
 body {
-  background: url(/styles/birdtile.png);
+  background: #fbd1e5;
+  background-image: url(/styles/birdtile.png);
 }
 
 header,
 footer {
-  background: #fbd1e5;
+	background: #fbd1e5;
+	outline:1px solid green;
 }
 
-main {
-  background: #fbd1e5;
-  padding: 0;
+main { background: #fbd1e5; outline:1px solid blue;
   margin: 0 auto;
   max-width: 39.3em;
 }
@@ -33,25 +32,27 @@ body > *:not(#themap) {
   padding-right: 1.5rem;
 }
 
+header {
+  padding-bottom: 1.5rem;
+  background: url(/styles/header-bg.svg) 1em top no-repeat;
+  background-color: #fbd1e5;
+  background-size: contain;
+  padding-left: 2em;
+}
+
 h1 {
   color: #522d7e;
   font-family: "Luckiest Guy", cursive;
   font-size: 2rem;
- /* margin-top: calc((1.5rem - 2rem) + 1.5rem); */
-  margin-bottom: 1.5rem;
   font-size: min(max(1rem, 8vw), 60px);
   text-align: center;
-  /*vertically centre text */
-  height: 5em;
-  line-height: 5em;
-  background: url(/styles/header-bg.svg) 1em top no-repeat;
-  background-size: contain;
-  text-shadow: 2px 2px 2px white;
-  padding-left: 2em;
+  height: 3em;
+  text-shadow: 3px 3px 3px white;
+  padding-top: 2em;
 }
 
 h1 span {
-  font-size: 3em;
+  font-size: 2em;
   color: red;
   text-shadow: 2px 2px 2px black;
 }
@@ -68,13 +69,11 @@ p.cta {
 }
 
 /* https://css-tricks.com/snippets/css/prevent-superscripts-and-subscripts-from-affecting-line-height/ */
-sup
- {
+sup {
   vertical-align: baseline;
   position: relative;
   top: -0.4em;
 }
-
 
 #themap {
   height: 400px;
@@ -82,29 +81,73 @@ sup
 }
 
 body pre code[class*="language-"] {
-    font-size: min(2.5vw, 1em);
+  font-size: min(2.5vw, 1em);
 }
-figure { text-align: center; font-size: small; }
+figure {
+  text-align: center;
+  font-size: small;
+}
 
-#card {max-width:100%; height: auto;}
+#card {
+  max-width: 100%;
+  height: auto;
+}
 
-form {text-align: center; font-size:.7em; margin-top:.5em}
-form>div {display:inline-flex;}
-form>div>label {margin-right:.3em;}
-form>div:not(:first-of-type) {margin-left:1em;}
-input[type=submit] {display:block; height:2em; margin:1em auto; font-size: 1.5em;}
+/* TODO: try CSS grid to make it look better at narrow widths */
+form {
+  text-align: center;
+  font-size: 0.7em;
+  margin-top: 0.5em;
+}
+form > div {
+  display: inline-flex;
+}
+form > div > label {
+  margin-right: 0.3em;
+}
+form > div:not(:first-of-type) {
+  margin-left: 1em;
+}
+input[type="submit"] {
+  display: block;
+  height: 2em;
+  margin: 1em auto;
+  font-size: 1.5em;
+}
 
 /* thanks Andy https://archive.hankchizljaw.com/wrote/create-a-responsive-grid-layout-with-no-media-queries-using-css-grid/ */
-#audios { --auto-grid-min-size: 200px;  display: grid;  grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));  grid-gap: 1rem;}
+#audios {
+  --auto-grid-min-size: 200px;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--auto-grid-min-size), 1fr)
+  );
+  grid-gap: 1rem;
+}
 
-#audios div p { text-align: center; margin: 0 auto;}
-#audios img, #audios audio {display:block; margin:0 auto;}
-#audios img {border:1px solid black;}
-audio {max-width:200px; box-shadow: 0 0 0 1px black;}
+#audios div p {
+  text-align: center;
+  margin: 0 auto;
+}
+#audios img,
+#audios audio {
+  display: block;
+  margin: 0 auto;
+}
+#audios img {
+  border: 1px solid black;
+}
+audio {
+  max-width: 200px;
+  box-shadow: 0 0 0 1px black;
+}
 
 /* make it look less shit in Chromium. (It looks sleek and glamorous in Firefox. */
-
-audio::-webkit-media-controls-panel { background-color:#fbd1e5;}
-audio::-webkit-media-controls-timeline {display:none;}
-
-
+audio::-webkit-media-controls-timeline {
+  display: none;
+}
+/* can't put a bg colour on the element itself, but can on the controls panel, which is effectively the same thing. transparent doesn't work.*/
+audio::-webkit-media-controls-panel {
+  background-color: #fbd1e5;
+}

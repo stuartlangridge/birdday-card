@@ -88,4 +88,5 @@ $data = json_decode($data, true);
                 Open Source License</a>.</small>
     </footer>
 </body>
+
 </html>

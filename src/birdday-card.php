@@ -11,7 +11,7 @@ list($lat, $lon, $data_cache_key) = validate();
 
 <head>
     <meta charset="utf-8">
-	<title>Which 3 Birdies? - Birdday Card</title>
+	<title>Which Three Birdies? - Birdday Card</title>
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -155,7 +155,7 @@ figure::after {
         <p><a href="./">Make your own “birdday card”</a></p>
         <p><a href="details.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>">Learn about this birdday card</a>
         </p>
-        <p><a href="about.html">Learn about <strong>Which 3 Birdies?™&copy;&reg;</strong> and how it works</a></p>
+        <p><a href="about.html">Learn about <strong>Which Three Birdies?™&copy;&reg;</strong> and how it works</a></p>
     </main>
     <footer><small>Made by <a href="https://kryogenix.org/">Stuart Langridge</a> (<a
                 href="https://twitter.com/sil">@sil</a>) and <a href="https://brucelawson.co.uk">Bruce Lawson</a> (<a
