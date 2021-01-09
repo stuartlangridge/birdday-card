@@ -120,8 +120,8 @@ figure::after {
         }
 
         figure[aria-busy="true"] div {
-   /*         height: 30%;
-            padding-top: 50%; */
+            height: 30%;
+            padding-top: 50%;
             background-image: url("/styles/Wicked-bird-by-Rones.svg");
             background-size: 400px;
             background-repeat: no-repeat;
@@ -167,16 +167,19 @@ figure::after {
                 Open Source License</a>.</small>
     </footer>
     <script>
+    document.querySelector("figure").setAttribute("aria-busy", "true");
     function imgfail() {
         console.log("image didn't load. Do something relevant.");
     }
 
     function imgsuccess() {
         console.log("image loaded OK, in an old browser.");
+        document.getElementsByTagName("figure")[0].setAttribute("aria-busy", "false");
     }
     </script>
     <script module async>
     async function imgsuccess() {
+        document.getElementsByTagName("figure")[0].setAttribute("aria-busy", "false");
         try {
             const response = await fetch("audios.php?lat=<?php echo $lat; ?>&lon=<?php echo $lon; ?>");
             if (!response.ok) {
