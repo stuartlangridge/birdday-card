@@ -143,7 +143,7 @@ figure::after {
 
 <body>
     <header>
-        <h1>Which <span>3</span> Birdies?</h1>
+        <h1>Which <span>Three</span> Birdies?</h1>
     </header>
     <main>
         <figure aria-busy="true">
@@ -161,7 +161,7 @@ figure::after {
                 href="https://twitter.com/sil">@sil</a>) and <a href="https://brucelawson.co.uk">Bruce Lawson</a> (<a
                 href="https://twitter.com/brucel">@brucel</a>). The header drawing is by <a
                 href="https://openclipart.org/detail/219787/owl-and-a-birds">Rones</a>. Not many birds were harmed
-            during the coding of this website (Bruce ate a chicken sandwich while writing the CSS). Source is on Github,
+            during the coding of this website (but Bruce ate a chicken  sandwich while writing the CSS). Source is on Github,
             licensed under the <a
                 href="https://web.archive.org/web/20140924010836/http://wiseearthpublishers.com/sites/wiseearthpublishers.com/files/PeacefulOSL.txt">Peaceful
                 Open Source License</a>.</small>

@@ -1,8 +1,8 @@
 html {
   background: #fbd1e5;
-/*  min-height: 100vh; */
+  min-height: 100vh;
   font-family: Roboto, sans-serif;
-	font-size: min(max(1rem, 4vw), 22px);
+  font-size: min(max(1rem, 4vw), 22px);
 }
 
 body {
@@ -12,13 +12,16 @@ body {
 
 header,
 footer {
-	background: #fbd1e5;
-	outline:1px solid green;
+  background: #fbd1e5;
+/*  outline: 1px solid green; */
 }
 
-main { background: #fbd1e5; outline:1px solid blue;
+main {
+  background: #fbd1e5;
+/*  outline: 1px solid blue; */
   margin: 0 auto;
-  max-width: 39.3em;
+	max-width: 39.3em;
+	padding: 1em 0;
 }
 
 footer {
@@ -150,4 +153,8 @@ audio::-webkit-media-controls-timeline {
 /* can't put a bg colour on the element itself, but can on the controls panel, which is effectively the same thing. transparent doesn't work.*/
 audio::-webkit-media-controls-panel {
   background-color: #fbd1e5;
+}
+
+p, {
+  margin-top: 0;
 }
