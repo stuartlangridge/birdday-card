@@ -27,7 +27,7 @@ list($lat, $lon, $data_cache_key) = validate();
     figure {
         position: relative;
         width: 90vw;
-        height: calc(90vw * 0.635);
+/*        height: calc(90vw * 0.635); */
         background-size: contain;
         overflow: hidden;
         clip-path: polygon(0 0, 800px 0, 800px 100%, 0 100%);

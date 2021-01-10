@@ -1,6 +1,6 @@
 html {
   background: #fbd1e5;
-  min-height: 100vh;
+ /* min-height: 100vh; */
   font-family: Roboto, sans-serif;
   font-size: min(max(1rem, 4vw), 22px);
 }
