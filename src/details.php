@@ -44,6 +44,11 @@ $data = json_decode($data, true);
         align-items: center;
         justify-content: center;
     }
+
+    img+p,
+    dt {
+        margin-top: 1em;
+    }
     </style>
 </head>
 
@@ -51,38 +56,44 @@ $data = json_decode($data, true);
     <header>
         <h1>Birdday Card details</h1>
     </header>
-    <main>
-        <img id="card" src="img.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>" alt="loading your card..."
-            width="400" height="270">
+    <div>
+        <main>
+            <img id="card" src="img.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>" alt="loading your card...">
 
-        <p>This card was constructed from data taken from various places.</p>
+            <p>This card was constructed from data taken from various sources.</p>
 
-        <dl>
-            <dt>Location:</dt>
-            <dd><?php echo $data["location"][0]; ?></dd>
-            <dd>provided by <a href="https://51degrees.com">51Degrees</a></dd>
-            <dt>Location imagery:</dt>
-            <dd><a href="<?php echo $data["town"]; ?>">Local image</a></dd>
-            <dd>provided by <a href="https://wikidata.org">Wikidata</a></dd>
-            <dt>Local birds:</dt>
-            <dd>
-                <a href='<?php echo $data["birds"][0]["wikidata"]; ?>'><?php
+            <dl>
+                <dt>Location:</dt>
+                <dd><?php echo $data["location"][0]; ?></dd>
+                <dd>provided by <a href="https://51degrees.com">51Degrees</a></dd>
+                <dt>Location imagery:</dt>
+                <dd><a href="<?php echo $data["town"]; ?>">Local image</a></dd>
+                <dd>provided by <a href="https://wikidata.org">Wikidata</a></dd>
+                <dt>Local birds:</dt>
+                <dd>
+                    <a href='<?php echo $data["birds"][0]["wikidata"]; ?>'><?php
             echo htmlspecialchars($data["birds"][0]["species"]); ?></a>,
-                <a href='<?php echo $data["birds"][1]["wikidata"]; ?>'><?php
+                    <a href='<?php echo $data["birds"][1]["wikidata"]; ?>'><?php
             echo htmlspecialchars($data["birds"][1]["species"]); ?></a>,
-                <a href='<?php echo $data["birds"][2]["wikidata"]; ?>'><?php
+                    <a href='<?php echo $data["birds"][2]["wikidata"]; ?>'><?php
             echo htmlspecialchars($data["birds"][2]["species"]); ?></a>
-            </dd>
-            <dd>provided by <a href="<?php echo $data["xenourl"]; ?>">Xeno Canto</a></dd>
-        </dl>
-        <p><a href="birdday-card.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>">Show this birdday card</a></p>
-        <p><a href="about.html">Learn about the birdday card app</a></p>
-    </main>
+                </dd>
+                <dd>provided by <a href="<?php echo $data["xenourl"]; ?>">Xeno Canto</a></dd>
+            </dl>
+            <nav>
+                <p><a href="birdday-card.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>">Show this birdday
+                        card</a>
+                </p>
+                <p><a href="about.html">Learn about the birdday card app</a></p>
+            </nav>
+        </main>
+    </div>
     <footer><small>Made by <a href="https://kryogenix.org/">Stuart Langridge</a> (<a
                 href="https://twitter.com/sil">@sil</a>) and <a href="https://brucelawson.co.uk">Bruce Lawson</a> (<a
                 href="https://twitter.com/brucel">@brucel</a>). The header drawing is by <a
-                href="https://openclipart.org/detail/219787/owl-and-a-birds">Rones</a>. Not many birds were harmed
-            during the coding of this website (but Bruce ate a chicken  sandwich while writing the CSS). Source is on Github,
+                href="https://openclipart.org/detail/219787/owl-and-a-birds">Rones</a>. <br>Not many birds were harmed
+            during the coding of this website (but Bruce ate a chicken sandwich while writing the CSS). <br>Source is on
+            Github,
             licensed under the <a
                 href="https://web.archive.org/web/20140924010836/http://wiseearthpublishers.com/sites/wiseearthpublishers.com/files/PeacefulOSL.txt">Peaceful
                 Open Source License</a>.</small>

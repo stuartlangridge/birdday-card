@@ -25,7 +25,8 @@ list($lat, $lon, $data_cache_key) = validate();
     }
 
     figure {
-        position: relative;
+		position: relative;
+		margin-bottom:2em;
         width: 90vw;
 /*        height: calc(90vw * 0.635); */
         background-size: contain;
@@ -33,25 +34,6 @@ list($lat, $lon, $data_cache_key) = validate();
         clip-path: polygon(0 0, 800px 0, 800px 100%, 0 100%);
     }
 
-    /*
-figure img {
-    position: absolute;
-    top: 19.64%;
-    left: 18.88%;
-    width: 57.1%;
-    height: 60.606%;
-}
-figure::after {
-    content: "";
-    position: absolute;
-    z-index: 2;
-    top: 19.64%;
-    left: 18.88%;
-    width: 57.1%;
-    height: 60.606%;
-    box-shadow: inset 0px 0px 50px #6dac85;
-}
-*/
     figure::before,
     figure::after {
         content: "";
@@ -137,7 +119,9 @@ figure::after {
             100% {
                 transform: rotate(360deg);
             }
-        }
+		}
+
+
     </style>
 </head>
 
@@ -145,23 +129,26 @@ figure::after {
     <header>
         <h1>Which <span>Three</span> Birdies?</h1>
     </header>
-    <main>
+    <div><main>
         <figure aria-busy="true">
             <div></div>
             <img id="card" src="img.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>" alt="loading your card..."
                 width="800" height="540" onerror="imgfail()" onload="imgsuccess()">
         </figure>
         <div id="audios"></div>
-        <p><a href="./">Make your own “birdday card”</a></p>
+
+		<nav>
+		<p><a href="./">Make your own “birdday card”</a></p>
         <p><a href="details.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>">Learn about this birdday card</a>
         </p>
-        <p><a href="about.html">Learn about <strong>Which Three Birdies?™&copy;&reg;</strong> and how it works</a></p>
-    </main>
+		<p><a href="about.html">Learn about <strong>Which Three Birdies?™&copy;&reg;</strong> and how it works</a></p>
+		</nav>
+    </main></div>
     <footer><small>Made by <a href="https://kryogenix.org/">Stuart Langridge</a> (<a
                 href="https://twitter.com/sil">@sil</a>) and <a href="https://brucelawson.co.uk">Bruce Lawson</a> (<a
                 href="https://twitter.com/brucel">@brucel</a>). The header drawing is by <a
-                href="https://openclipart.org/detail/219787/owl-and-a-birds">Rones</a>. Not many birds were harmed
-            during the coding of this website (but Bruce ate a chicken  sandwich while writing the CSS). Source is on Github,
+                href="https://openclipart.org/detail/219787/owl-and-a-birds">Rones</a>. <br>Not many birds were harmed
+            during the coding of this website (but Bruce ate a chicken  sandwich while writing the CSS). <br>Source is on Github,
             licensed under the <a
                 href="https://web.archive.org/web/20140924010836/http://wiseearthpublishers.com/sites/wiseearthpublishers.com/files/PeacefulOSL.txt">Peaceful
                 Open Source License</a>.</small>
@@ -188,9 +175,10 @@ figure::after {
             }
             const audios = await response.json();
             console.log("got audios", audios);
-            const all_container = document.getElementById("audios");
+			const all_container = document.getElementById("audios");
             audios.forEach(adata => {
-                const bird_container = document.createElement("div");
+				const bird_container = document.createElement("div");
+
                 const audio = document.createElement("audio");
                 const img = document.createElement("img");
                 const species_name = document.createElement("p");
@@ -198,7 +186,7 @@ figure::after {
                 audio.src = adata.src;
                 img.src = "birdimg.php?s=" + encodeURIComponent(adata.species);
                 img.alt = "a bird.";
-                species_name.append(adata.species);
+				species_name.append(adata.species);
                 bird_container.append(img);
                 bird_container.append(audio);
                 bird_container.append(species_name);
