@@ -71,12 +71,21 @@ $data = json_decode($data, true);
                 <dd>provided by <a href="https://wikidata.org">Wikidata</a></dd>
                 <dt>Local birds:</dt>
                 <dd>
+                    <?php if (count($data["birds"]) > 0) { ?>
                     <a href='<?php echo $data["birds"][0]["wikidata"]; ?>'><?php
             echo htmlspecialchars($data["birds"][0]["species"]); ?></a>,
+                    <?php } ?>
+                    <?php if (count($data["birds"]) > 1) { ?>
                     <a href='<?php echo $data["birds"][1]["wikidata"]; ?>'><?php
             echo htmlspecialchars($data["birds"][1]["species"]); ?></a>,
+                    <?php } ?>
+                    <?php if (count($data["birds"]) > 2) { ?>
                     <a href='<?php echo $data["birds"][2]["wikidata"]; ?>'><?php
             echo htmlspecialchars($data["birds"][2]["species"]); ?></a>
+                    <?php } ?>
+                    <?php if (count($data["birds"]) == 0) { ?>
+                        We couldn't find any local birds. Sorry!
+                    <?php } ?>
                 </dd>
                 <dd>provided by <a href="<?php echo $data["xenourl"]; ?>">Xeno Canto</a></dd>
             </dl>
