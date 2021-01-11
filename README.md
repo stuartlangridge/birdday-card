@@ -38,7 +38,7 @@ Azure portal.
 #### Build the image
 
 Navigate to the source directory containing the Dockerfile and execute 
-`docker build -t [image-name] -f dockerfile`
+`docker build -t [image-name] -f dockerfile .`
 
 There should now be an entry with the given image-name under the 'images' 
 section in docker desktop.
