@@ -126,6 +126,66 @@ list($lat, $lon, $data_cache_key) = validate();
 </head>
 
 <body>
+    <script>
+    /* Scripts come first in the body, despite the slight delay, because imgsuccess has to be defined when the image loads */
+    function imgfail() {
+        console.log("image didn't load. Do something relevant.");
+    }
+
+    function imgsuccess() {
+        console.log("image loaded OK, in an old browser.");
+        document.getElementsByTagName("figure")[0].setAttribute("aria-busy", "false");
+    }
+    </script>
+    <script module async>
+    async function imgsuccess() {
+        document.getElementsByTagName("figure")[0].setAttribute("aria-busy", "false");
+        function squawk(count) {
+            let ret = [];
+            let noises = ["tweet", "twitter", "squawk", "SQUAWK", "chirp", "cheep",
+                "whistle", "brrr-ha-ha-ha", "peep", "cuckoo", "hoot", "pip-pip"];
+            for (var i=0; i<count; i++) {
+                ret.push(noises[Math.floor(Math.random() * noises.length)]);
+            }
+            return ret.join(" ");
+        }
+        try {
+            const response = await fetch("audios.php?lat=<?php echo $lat; ?>&lon=<?php echo $lon; ?>");
+            if (!response.ok) {
+                console.log(`Bad response from audios (${response.status}); bailing.`);
+                return;
+            }
+            const audios = await response.json();
+            console.log("got audios", audios);
+            const all_container = document.getElementById("audios");
+            audios.forEach(adata => {
+                const bird_container = document.createElement("div");
+
+                const audio = document.createElement("audio");
+                const img = document.createElement("img");
+                const species_name = document.createElement("p");
+                const ds = document.createElement("details");
+                const sum = document.createElement("summary");
+                sum.append("Transcript");
+                ds.append(sum);
+                ds.append(squawk(Math.ceil(Math.random() * 3 + 3)))
+                audio.controls = true;
+                audio.src = adata.src;
+                img.src = "birdimg.php?s=" + encodeURIComponent(adata.species);
+                img.alt = "a bird.";
+                species_name.append(adata.species);
+                bird_container.append(img);
+                bird_container.append(audio);
+                bird_container.append(species_name);
+                bird_container.append(ds);
+                all_container.append(bird_container);
+            })
+        } catch (e) {
+            console.log("Error fetching audios, so ignoring.", e);
+        }
+    }
+    </script>
+
     <header>
         <h1>Which <span>Three</span> Birdies?</h1>
     </header>
@@ -154,48 +214,7 @@ list($lat, $lon, $data_cache_key) = validate();
                 Open Source License</a>.</small>
     </footer>
     <script>
-    document.querySelector("figure").setAttribute("aria-busy", "true");
-    function imgfail() {
-        console.log("image didn't load. Do something relevant.");
-    }
-
-    function imgsuccess() {
-        console.log("image loaded OK, in an old browser.");
-        document.getElementsByTagName("figure")[0].setAttribute("aria-busy", "false");
-    }
-    </script>
-    <script module async>
-    async function imgsuccess() {
-        document.getElementsByTagName("figure")[0].setAttribute("aria-busy", "false");
-        try {
-            const response = await fetch("audios.php?lat=<?php echo $lat; ?>&lon=<?php echo $lon; ?>");
-            if (!response.ok) {
-                console.log(`Bad response from audios (${response.status}); bailing.`);
-                return;
-            }
-            const audios = await response.json();
-            console.log("got audios", audios);
-			const all_container = document.getElementById("audios");
-            audios.forEach(adata => {
-				const bird_container = document.createElement("div");
-
-                const audio = document.createElement("audio");
-                const img = document.createElement("img");
-                const species_name = document.createElement("p");
-                audio.controls = true;
-                audio.src = adata.src;
-                img.src = "birdimg.php?s=" + encodeURIComponent(adata.species);
-                img.alt = "a bird.";
-				species_name.append(adata.species);
-                bird_container.append(img);
-                bird_container.append(audio);
-                bird_container.append(species_name);
-                all_container.append(bird_container);
-            })
-        } catch (e) {
-            console.log("Error fetching audios, so ignoring.", e);
-        }
-    }
+            document.querySelector("figure").setAttribute("aria-busy", "true");
     </script>
 </body>
 

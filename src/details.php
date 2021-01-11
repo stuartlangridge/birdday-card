@@ -87,7 +87,13 @@ $data = json_decode($data, true);
                         We couldn't find any local birds. Sorry!
                     <?php } ?>
                 </dd>
-                <dd>provided by <a href="<?php echo $data["xenourl"]; ?>">Xeno Canto</a></dd>
+                <dd>
+                    <?php if (count($data["birds"]) > 0 && $data["birds"][0]["species"] == "Raphus cucullatus (dodo)") {
+                        echo " (that is, we couldn't find any local birds. Sorry!)";
+                    } else { ?>
+                    provided by <a href="<?php echo $data["xenourl"]; ?>">Xeno Canto</a>
+                    <?php } ?>
+                </dd>
             </dl>
             <nav>
                 <p><a href="birdday-card.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>">Show this birdday

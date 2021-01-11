@@ -278,6 +278,9 @@ function scaler($im, $w, $h) {
     } else if ($nh > $h) {
         $cx = 0;
         $cy = ceil(($nh - $h) / 2);
+    } else {
+        $cx = 0;
+        $cy = 0;
     }
     decho("Cropping image of size $nw $nh to be size $w $h from point $cx $cy");
     $n = imagecrop($n, array("x" => $cx, "y" => $cy, "width" => $w, "height" => $h));
@@ -289,7 +292,7 @@ function add_bird($base, $bird, $cache_image, $w, $h, $x, $y, $border) {
     decho("Checking bird cache image $cache_image");
     $b1 = FALSE;
     if (file_exists($cache_image)) {
-        $b1 = @imagecreatefromjpeg($bird);
+        $b1 = imagecreatefromjpeg($cache_image);
         if ($b1 === FALSE) {
             decho("Couldn't load cached bird image $bird!");
         }
@@ -306,7 +309,9 @@ function add_bird($base, $bird, $cache_image, $w, $h, $x, $y, $border) {
     imagecopymerge($base, $b1, $x, $y, 0, 0, $w, $h, 100);
     $borderimg = @imagecreatefrompng($border);
     imagecopy($base, $borderimg, $x, $y, 0, 0, $w, $h);
-    imagejpeg($b1, $cache_image);
+    if (!file_exists($cache_image)) {
+        imagejpeg($b1, $cache_image);
+    }
     decho("Saved bird cache image as $cache_image");
 }
 
@@ -322,7 +327,34 @@ function create_save_image($fn, $lat, $lon, $data_cache_key) {
     list($image_url, $townurl) = wikidata_image($loc_descriptions, 1000);
     decho("Base image URL is $image_url");
     list($birds, $xenourl) = xeno_canto($lat, $lon);
-    decho("Got birds: " . json_encode($birds));
+    decho("Got birds: " . json_encode($birds));#
+
+    if (count($birds) == 0) {
+        decho("No birds, so adding the Three Fictional Birds");
+        $birds = array(
+            array(
+                "image" => "/about-images/dodo.jpg",
+                "wikidata" => "https://en.wikipedia.org/wiki/Dodo",
+                "species" => "Raphus cucullatus (dodo)",
+                "sound_url" => "/about-images/dodo.mp3",
+                "cache_image" => __DIR__ . "/about-images/dodo.jpg"
+            ),
+            array(
+                "image" => "/about-images/charlie_parker.jpg",
+                "wikidata" => "https://en.wikipedia.org/wiki/Charlie_Parker",
+                "species" => 'Charlie “Bird” Parker',
+                "sound_url" => "/about-images/charlie_parker.mp3",
+                "cache_image" => __DIR__ . "/about-images/charlie_parker.jpg"
+            ),
+            array(
+                "image" => "/about-images/thunderbird_2.jpg",
+                "wikidata" => "https://en.wikipedia.org/wiki/Thunderbirds_machines#Thunderbird_2",
+                "species" => "Thunderbird 2",
+                "sound_url" => "/about-images/Sound_of_AN-24_airplane_not_actually_thunderbird_2.mp3",
+                "cache_image" => __DIR__ . "/about-images/thunderbird_2.jpg"
+            )
+        );
+    }
 
     store_cache_key($data_cache_key, json_encode(array(
         "birds" => $birds,

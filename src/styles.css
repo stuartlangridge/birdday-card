@@ -1,3 +1,31 @@
+/* roboto-regular - latin */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/roboto-v20-latin-regular.eot'); /* IE9 Compat Modes */
+  src: local(''),
+       url('../fonts/roboto-v20-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/roboto-v20-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/roboto-v20-latin-regular.woff') format('woff'), /* Modern Browsers */
+       url('../fonts/roboto-v20-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/roboto-v20-latin-regular.svg#Roboto') format('svg'); /* Legacy iOS */
+}
+
+/* luckiest-guy-regular - latin */
+@font-face {
+  font-family: 'Luckiest Guy';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/luckiest-guy-v11-latin-regular.eot'); /* IE9 Compat Modes */
+  src: local(''),
+       url('../fonts/luckiest-guy-v11-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/luckiest-guy-v11-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/luckiest-guy-v11-latin-regular.woff') format('woff'), /* Modern Browsers */
+       url('../fonts/luckiest-guy-v11-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/luckiest-guy-v11-latin-regular.svg#LuckiestGuy') format('svg'); /* Legacy iOS */
+}
+
 html {
   background: #fbd1e5;
   font-family: Roboto, sans-serif;
@@ -131,7 +159,7 @@ input[type="submit"] {
   margin-bottom: 1.5em;
 }
 
-#audios div p {
+#audios div p, #audios div details {
   text-align: center;
   margin: 0 auto;
 }
