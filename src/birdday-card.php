@@ -142,7 +142,15 @@ list($lat, $lon, $data_cache_key) = validate();
                 const sum = document.createElement("summary");
                 sum.append("Transcript");
                 ds.append(sum);
-                ds.append(squawk(Math.ceil(Math.random() * 3 + 3)))
+                if (adata.species.indexOf("Raphus cucullatus") > -1) {
+                    ds.append("do-do-do-da-do (nobody knows what a dodo sounds like. might have been this. you don't know.)")
+                } else if (adata.species.indexOf("Charlie “Bird” Parker") > -1) {
+                    ds.append("sublime saxophony")
+                } else if (adata.species.indexOf("Thunderbird 2") > -1) {
+                    ds.append("F-A-B!")
+                } else {
+                    ds.append(squawk(Math.ceil(Math.random() * 3 + 3)))
+                }
                 audio.controls = true;
                 audio.src = adata.src;
                 img.src = "birdimg.php?s=" + encodeURIComponent(adata.species);
