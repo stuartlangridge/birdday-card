@@ -95,32 +95,6 @@ list($lat, $lon, $data_cache_key) = validate();
         content: "loading";
     }
 
-    @media screen and not (prefers-reduced-motion) {
-
-        figure[aria-busy="true"] div::before {
-            content: "";
-        }
-
-        figure[aria-busy="true"] div {
-            height: 30%;
-            padding-top: 50%;
-            background-image: url("/styles/Wicked-bird-by-Rones.svg");
-            background-size: 400px;
-            background-repeat: no-repeat;
-            background-position: left center;
-            animation: spin 2s infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-		}
-
 
     </style>
 </head>
