@@ -7,13 +7,13 @@ list($lat, $lon, $data_cache_key) = validate();
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
-	<title>Which Three Birdies? - Birdday Card</title>
-	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Roboto&display=swap" rel="stylesheet">
+    <title>Which Three Birdies? - Birdday Card</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
     #card {
@@ -25,10 +25,9 @@ list($lat, $lon, $data_cache_key) = validate();
     }
 
     figure {
-		position: relative;
-		margin-bottom:2em;
+        position: relative;
+        margin-bottom: 2em;
         width: 90vw;
-/*        height: calc(90vw * 0.635); */
         background-size: contain;
         overflow: hidden;
         clip-path: polygon(0 0, 800px 0, 800px 100%, 0 100%);
@@ -52,12 +51,14 @@ list($lat, $lon, $data_cache_key) = validate();
         left: 0;
         background-color: transparent;
         z-index: -1;
+        filter: invert(70%) sepia(550) hue-rotate(150deg);
     }
 
     figure::after {
         top: 400px animation-delay: 0.2s, -0.6s;
         animation-duration: 0.51s, 2.3s;
         animation-name: fly-cycle, scrollup;
+        filter: invert(70%) sepia(550) hue-rotate(150deg);
     }
 
     @keyframes fly-cycle {
@@ -85,76 +86,12 @@ list($lat, $lon, $data_cache_key) = validate();
             transform: translateX(100%) translateY(150%);
         }
     }
-
-    /* loading spinner */
-    figure:not[aria-busy="true"] div {
-        display: none;
-    }
-
-    figure[aria-busy="true"] div::before {
-        content: "loading";
-    }
-
-    @media screen and not (prefers-reduced-motion) {
-
-        figure[aria-busy="true"] div::before {
-            content: "";
-        }
-
-        figure[aria-busy="true"] div {
-            height: 30%;
-            padding-top: 50%;
-            background-image: url("/styles/Wicked-bird-by-Rones.svg");
-            background-size: 400px;
-            background-repeat: no-repeat;
-            background-position: left center;
-            animation: spin 2s infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-		}
-
-
     </style>
 </head>
 
 <body>
-    <header>
-        <h1>Which <span>Three</span> Birdies?</h1>
-    </header>
-    <div><main>
-        <figure aria-busy="true">
-            <div></div>
-            <img id="card" src="img.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>" alt="loading your card..."
-                width="800" height="540" onerror="imgfail()" onload="imgsuccess()">
-        </figure>
-        <div id="audios"></div>
-
-		<nav>
-		<p><a href="./">Make your own “birdday card”</a></p>
-        <p><a href="details.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>">Learn about this birdday card</a>
-        </p>
-		<p><a href="about.html">Learn about <strong>Which Three Birdies?™&copy;&reg;</strong> and how it works</a></p>
-		</nav>
-    </main></div>
-    <footer><small>Made by <a href="https://kryogenix.org/">Stuart Langridge</a> (<a
-                href="https://twitter.com/sil">@sil</a>) and <a href="https://brucelawson.co.uk">Bruce Lawson</a> (<a
-                href="https://twitter.com/brucel">@brucel</a>). The header drawing is by <a
-                href="https://openclipart.org/detail/219787/owl-and-a-birds">Rones</a>. <br>Not many birds were harmed
-            during the coding of this website (but Bruce ate a chicken  sandwich while writing the CSS). <br>Source is on Github,
-            licensed under the <a
-                href="https://web.archive.org/web/20140924010836/http://wiseearthpublishers.com/sites/wiseearthpublishers.com/files/PeacefulOSL.txt">Peaceful
-                Open Source License</a>.</small>
-    </footer>
     <script>
-    document.querySelector("figure").setAttribute("aria-busy", "true");
+    /* Scripts come first in the body, despite the slight delay, because imgsuccess has to be defined when the image loads */
     function imgfail() {
         console.log("image didn't load. Do something relevant.");
     }
@@ -167,6 +104,18 @@ list($lat, $lon, $data_cache_key) = validate();
     <script module async>
     async function imgsuccess() {
         document.getElementsByTagName("figure")[0].setAttribute("aria-busy", "false");
+
+        function squawk(count) {
+            let ret = [];
+            let noises = ["tweet", "twitter", "squawk", "SQUAWK", "chirp", "cheep", "toot",
+                "whistle", "brrr-ha-ha-ha", "peep", "coo", "cluck", "honk", "hoo-hoo", "(flap)", "(flutter)",
+                "caw", "screech", "chirrup", "cuckoo", "hoot", "pip-pip"
+            ];
+            for (var i = 0; i < count; i++) {
+                ret.push(noises[Math.floor(Math.random() * noises.length)]);
+            }
+            return ret.join(" ");
+        }
         try {
             const response = await fetch("audios.php?lat=<?php echo $lat; ?>&lon=<?php echo $lon; ?>");
             if (!response.ok) {
@@ -175,27 +124,78 @@ list($lat, $lon, $data_cache_key) = validate();
             }
             const audios = await response.json();
             console.log("got audios", audios);
-			const all_container = document.getElementById("audios");
+            const all_container = document.getElementById("audios");
             audios.forEach(adata => {
-				const bird_container = document.createElement("div");
+                const bird_container = document.createElement("div");
 
                 const audio = document.createElement("audio");
                 const img = document.createElement("img");
                 const species_name = document.createElement("p");
+                const ds = document.createElement("details");
+                const sum = document.createElement("summary");
+                sum.append("Transcript");
+                ds.append(sum);
+                if (adata.species.indexOf("Raphus cucullatus") > -1) {
+                    ds.append(
+                        "do-do-do-da-do. (Nobody knows what a dodo sounds like. It might have been this. You don't know.)"
+                    )
+                } else if (adata.species.indexOf("Charlie “Bird” Parker") > -1) {
+                    ds.append("Sublime saxophony.")
+                } else if (adata.species.indexOf("Thunderbird 2") > -1) {
+                    ds.append("F-A-B!")
+                } else {
+                    ds.append(squawk(Math.ceil(Math.random() * 3 + 3)))
+                }
                 audio.controls = true;
                 audio.src = adata.src;
                 img.src = "birdimg.php?s=" + encodeURIComponent(adata.species);
                 img.alt = "a bird.";
-				species_name.append(adata.species);
+                species_name.append(adata.species);
                 bird_container.append(img);
                 bird_container.append(audio);
                 bird_container.append(species_name);
+                bird_container.append(ds);
                 all_container.append(bird_container);
             })
         } catch (e) {
             console.log("Error fetching audios, so ignoring.", e);
         }
     }
+    </script>
+
+    <header>
+        <h1>Which <span>Three</span> Birdies?</h1>
+    </header>
+    <div>
+        <main>
+            <figure aria-busy="true">
+                <img id="card" src="img.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>"
+                    alt="loading your card..." onerror="imgfail()" onload="imgsuccess()">
+            </figure>
+            <div id="audios"></div>
+
+            <nav>
+                <p><a href="./">Make your own “birdday card”</a></p>
+                <p><a href="details.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>">Learn about this birdday
+                        card</a>
+                </p>
+                <p><a href="about.html">Learn about <strong>Which Three Birdies?™&copy;&reg;</strong> and how it
+                        works</a></p>
+            </nav>
+        </main>
+    </div>
+    <footer><small>Made by <a href="https://kryogenix.org/">Stuart Langridge</a> (<a
+                href="https://twitter.com/sil">@sil</a>) and <a href="https://brucelawson.co.uk">Bruce Lawson</a> (<a
+                href="https://twitter.com/brucel">@brucel</a>). The header drawing is by <a
+                href="https://openclipart.org/detail/219787/owl-and-a-birds">Rones</a>.<br>Not many birds were harmed
+            during the coding of this website (but Bruce ate a chicken sandwich while writing the CSS). <br>Source is on
+            Github,
+            licensed under the <a
+                href="https://web.archive.org/web/20140924010836/http://wiseearthpublishers.com/sites/wiseearthpublishers.com/files/PeacefulOSL.txt">Peaceful
+                Open Source License</a>.</small>
+    </footer>
+    <script>
+    document.querySelector("figure").setAttribute("aria-busy", "true");
     </script>
 </body>
 
