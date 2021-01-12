@@ -38,10 +38,13 @@ Azure portal.
 #### Build the image
 
 Navigate to the source directory containing the Dockerfile and execute 
-`docker build -t [image-name] -f dockerfile .`
+`docker build -t [image-name] -f Dockerfile .`
+
+Note - 'Dockerfile' is case-sensitive.
 
 There should now be an entry with the given image-name under the 'images' 
-section in docker desktop.
+section in docker desktop. If there was already an image, it should have
+been updated with the new build
 
 #### Tag the image
 
@@ -55,4 +58,18 @@ pushing to:
 Push the image to the container registry.
 
 `docker push microsites.azurecr.io/w3b`
+
+#### Update services
+
+Restart the w3b-test container instance. You can do this via the Azure 
+portal, or the Azure CLI using the `az container restart` command.
+
+As w3b-test is pointing to the 'latest' tag, it will automatically 
+pick up the new image when it starts up.
+
+Verify that the changes are working as expected on the 
+[test site](w3b-test.uksouth.azurecontainer.io).
+
+Finally, restart the 'which3birdies' app service in order to allow
+it to pick up the new image as well.
 
