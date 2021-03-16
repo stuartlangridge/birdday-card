@@ -18,7 +18,7 @@
 <div><main>
 <h2>So, what’s this all about?</h2>
 
-<p>Essentially, <a href="/index.html">Which Three Birdies?™&copy;&reg;</a> is a chance to play with some nice APIs and stitch the results together. <a href="https://www.xeno-canto.org/">Xeno-Canto</a> have recordings of birdsong from all around the world. <a href="https://www.wikidata.org/">Wikidata</a> has pictures of all sorts of places and things. And <a href="https://51degrees.com">51 Degrees</a> can geolocate a point into a detailed native-language description of where that point is. Glue all those together and you’ve got... well, you’ve got a system for making a “birdday” card, right?</p>
+<p>Essentially, <a href="/index.html">Which Three Birdies?™&copy;&reg;</a> is a chance to play with some nice APIs and stitch the results together. <a href="https://www.xeno-canto.org/">Xeno-Canto</a> have recordings of birdsong from all around the world. <a href="https://www.wikidata.org/">Wikidata</a> has pictures of all sorts of places and things. And <a href="https://51degrees.com">51Degrees</a> can geolocate a point into a detailed native-language description of where that point is. Glue all those together and you’ve got... well, you’ve got a system for making a “birdday” card, right?</p>
 
 <p><i>(The illusion of the single authorial "I" breaks for a moment here, where Stuart blames Bruce for the name and bangs his head frustratedly on the fourth wall. OK, no more asides to the audience. Back to the code.)</i></p>
 
@@ -34,7 +34,7 @@
 
 <p>Step 1 is to find a picture of a place. Well, we haven’t got a place; what we’ve got is some coordinates for a spot on the earth, latitude and longitude. So step zero is to find which place that is. Looking up a geographical point and giving it a name is the task of <em>geolocation</em>, and it is not as easy as you might think. Sometimes it’s simple enough: Big Ben is definitely in London, the Forbidden City is definitely in Beijing, and (as John Donne memorably wrote) Stormont is in Ireland. But which town is this field you’ve chosen closest to? What about the spot at the summit of Mount Kilimanjaro? If it’s not near a town, which region is it in? Which language should the answer be in? So we have someone else do the heavy lifting on that particular point.</p>
 
-<p>Let’s try things for this place here: in the middle of the Green Mountain National Forest in the US state of Vermont. The birthplace (roughly) of <a href="hhttps://en.wikipedia.org/wiki/Rachel_Brooks_Gleason">Rachel Brooks Gleason</a>, born this day in 1820, fourth woman to earn a medical degree in the United States, and anti-slavery activist: latitude <code>43.156702</code>, longitude <code>-72.914178</code>.</p>
+<p>Let’s try things for this place here: in the middle of the Green Mountain National Forest in the US state of Vermont. The birthplace (roughly) of <a href="https://en.wikipedia.org/wiki/Rachel_Brooks_Gleason">Rachel Brooks Gleason</a>, born this day in 1820, fourth woman to earn a medical degree in the United States, and anti-slavery activist: latitude <code>43.156702</code>, longitude <code>-72.914178</code>.</p>
 
 <figure>
     <img src="about-images/winhall.png" alt="A map showing a marker in Vermont, USA, in the midst of the Green Mountain National Forest, near to the town of Winhall">
@@ -54,7 +54,7 @@ $flowData->evidence->set("query.51D_Pos_longitude", $lon);
 $result = $flowData->process();
 </code></pre>
 
-<p>That will populate our <code>$flowData</code> object with some or all of a town, a region, a state, and a country corresponding to the latitude (<code>$lat</code>) and longitude (<code>$lon</code>) we have. (You need an API key, what 51Degrees calls a “resource key”. See <a href="https://docs.51degrees.com/developers/v4">the 51Degrees API docs</a> for details on the above functions.)</p>
+<p>That will populate our <code>$flowData</code> object with some or all of a town, a region, a state, and a country corresponding to the latitude (<code>$lat</code>) and longitude (<code>$lon</code>) we have. (You need an API key, what 51Degrees calls a “resource key”. See <a href="https://51degrees.com/documentation/4.2/index.html">the 51Degrees API docs</a> for details on the above functions.)</p>
 
 <p>Now, not all of those things &mdash; town, region, state, country &mdash; are actually available for any given point. Some countries don’t really have “regions” or “states”; some points just aren’t very near an actual town at all. So we need to check whether each of those things are populated. The API does this in two ways; <code>location->whatever</code> might not be present at all, and if it is present it may have no value. So we check for each, and then we’ll have <code>$town</code>, <code>$region</code>, <code>$state</code>, and <code>$country</code> all either a string or <code>null</code>.</p>
 
@@ -193,7 +193,7 @@ if (!$country->hasValue) $country = null;
 
 <p>What remains is to pull all this imagery and sound together into the classic of modern web design that you see before you to make a "birdday card". I’m not the person to advise on how to do that &mdash; you can see from the design that I am no designer. You’ll find PHP’s <a href="https://www.php.net/manual/en/function.imagecopy.php"><code>imagecopy()</code></a> function useful, though. The results are also cached; images once created are saved, and the results from API calls are also cached. This is important when you’re using third-party APIs; you want to minimise the number of times you call them when you can, firstly because retrieving results you’ve already got is faster, and secondly because (especially with freely-provided data APIs such as xeno-canto) an increase in popularity on your side should not result in a crushing increase in load for them. So: cache your API calls!</p>
 
-<p>That’s the birdday card, and how to pull together disparate API data into one thing on the web. Thank you to xeno-canto, wikimedia, and 51 Degrees for providing the data required to do this, and to Rachel Brooks Gleason for setting up a sanitarium which catered to upper-class women with what Wikipedia inexplicably refers to as “lady troubles”, the quotes being theirs. And for fighting against slavery, obvs. All of the trademark symbols are lies, too, as if you couldn't guess.</p>
+<p>That’s the birdday card, and how to pull together disparate API data into one thing on the web. Thank you to xeno-canto, wikimedia, and 51Degrees for providing the data required to do this, and to Rachel Brooks Gleason for setting up a sanitarium which catered to upper-class women with what Wikipedia inexplicably refers to as “lady troubles”, the quotes being theirs. And for fighting against slavery, obvs. All of the trademark symbols are lies, too, as if you couldn't guess.</p>
 
 <figure>
     <a href="birdday-card.php?lat=43.156702&amp;lon=-72.914178"><img src="img.php?lat=43.156702&amp;lon=-72.914178" alt="Rachel Brooks Gleason’s birdday card, showing the Winhall river in Vermont and the Canada goose, the mute swan, and the wood duck."></a>
