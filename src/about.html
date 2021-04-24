@@ -54,7 +54,7 @@ $flowData->evidence->set("query.51D_Pos_longitude", $lon);
 $result = $flowData->process();
 </code></pre>
 
-<p>That will populate our <code>$flowData</code> object with some or all of a town, a region, a state, and a country corresponding to the latitude (<code>$lat</code>) and longitude (<code>$lon</code>) we have. (You need an API key, what 51Degrees calls a “resource key”. See <a href="https://docs.51degrees.com/developers/v4">the 51Degrees API docs</a> for details on the above functions.)</p>
+<p>That will populate our <code>$flowData</code> object with some or all of a town, a region, a state, and a country corresponding to the latitude (<code>$lat</code>) and longitude (<code>$lon</code>) we have. (You need an API key, what 51Degrees calls a “resource key”. See <a href="https://51degrees.com/documentation/4.2/index.html">the 51Degrees API docs</a> for details on the above functions.)</p>
 
 <p>Now, not all of those things &mdash; town, region, state, country &mdash; are actually available for any given point. Some countries don’t really have “regions” or “states”; some points just aren’t very near an actual town at all. So we need to check whether each of those things are populated. The API does this in two ways; <code>location->whatever</code> might not be present at all, and if it is present it may have no value. So we check for each, and then we’ll have <code>$town</code>, <code>$region</code>, <code>$state</code>, and <code>$country</code> all either a string or <code>null</code>.</p>
 
