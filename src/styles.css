@@ -1,0 +1,221 @@
+/* roboto-regular - latin */
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/roboto-v20-latin-regular.eot"); /* IE9 Compat Modes */
+  src: local(""),
+    url("../fonts/roboto-v20-latin-regular.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-IE8 */ url("../fonts/roboto-v20-latin-regular.woff2") format("woff2"),
+    /* Super Modern Browsers */ url("../fonts/roboto-v20-latin-regular.woff")
+      format("woff"),
+    /* Modern Browsers */ url("../fonts/roboto-v20-latin-regular.ttf")
+      format("truetype"),
+    /* Safari, Android, iOS */
+      url("../fonts/roboto-v20-latin-regular.svg#Roboto") format("svg"); /* Legacy iOS */
+}
+
+/* luckiest-guy-regular - latin */
+@font-face {
+  font-family: "Luckiest Guy";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/luckiest-guy-v11-latin-regular.eot"); /* IE9 Compat Modes */
+  src: local(""),
+    url("../fonts/luckiest-guy-v11-latin-regular.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-IE8 */ url("../fonts/luckiest-guy-v11-latin-regular.woff2")
+      format("woff2"),
+    /* Super Modern Browsers */
+      url("../fonts/luckiest-guy-v11-latin-regular.woff") format("woff"),
+    /* Modern Browsers */ url("../fonts/luckiest-guy-v11-latin-regular.ttf")
+      format("truetype"),
+    /* Safari, Android, iOS */
+      url("../fonts/luckiest-guy-v11-latin-regular.svg#LuckiestGuy")
+      format("svg"); /* Legacy iOS */
+}
+
+html {
+  background: #fbd1e5;
+  font-family: Roboto, sans-serif;
+  font-size: min(max(1rem, 4vw), 22px);
+}
+
+header,
+footer {
+  background: #fbd1e5;
+}
+
+main {
+  background: #fbd1e5;
+  margin: 0 auto;
+  max-width: 39.3em;
+  padding: 0.5em 1.5em;
+}
+
+footer {
+  height: 3em;
+  padding: 1em;
+  text-align: center;
+}
+
+body > *:not(#themap) {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+header {
+  padding-bottom: 1.5rem;
+  background: url(/styles/header-bg.svg) 1em top no-repeat;
+  background-color: #fbd1e5;
+  background-size: contain;
+  padding-left: 2em;
+}
+
+h1 {
+  color: #522d7e;
+  font-family: "Luckiest Guy", cursive;
+  font-size: 2rem;
+  font-size: min(max(1rem, 8vw), 60px);
+  text-align: center;
+  height: 3em;
+  text-shadow: 3px 3px 3px white;
+  padding-top: 2em;
+}
+
+h1 span {
+  font-size: 2em;
+  color: red;
+  text-shadow: 2px 2px 2px black;
+}
+
+p {
+  line-height: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+p.cta {
+  font-size: 1.2em;
+  line-height: 1.4rem;
+  text-align: center;
+}
+
+/* https://css-tricks.com/snippets/css/prevent-superscripts-and-subscripts-from-affecting-line-height/ */
+sup {
+  vertical-align: baseline;
+  position: relative;
+  top: -0.4em;
+}
+
+#themap {
+  height: 400px;
+  filter: sepia(80%) hue-rotate(260deg);
+}
+
+body pre code[class*="language-"] {
+  font-size: min(2.5vw, 1em);
+}
+figure {
+  text-align: center;
+  font-size: small;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+#card {
+  max-width: 100%;
+  height: auto;
+}
+form {
+  text-align: center;
+  font-size: 0.7em;
+  margin-top: 0.5em;
+}
+form > div {
+  display: inline-flex;
+}
+form > div > label {
+  margin-right: 0.3em;
+}
+form > div:not(:first-of-type) {
+  margin-left: 1em;
+}
+input[type="submit"] {
+  display: block;
+  height: 2em;
+  margin: 1em auto;
+  font-size: 1.5em;
+}
+
+/* thanks Andy https://archive.hankchizljaw.com/wrote/create-a-responsive-grid-layout-with-no-media-queries-using-css-grid/ */
+#audios {
+  --auto-grid-min-size: 200px;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--auto-grid-min-size), 1fr)
+  );
+  grid-gap: 1rem;
+  margin-bottom: 1.5em;
+}
+
+#audios div p,
+#audios div details {
+  text-align: center;
+  margin: 0 auto;
+}
+#audios img,
+#audios audio {
+  display: block;
+  margin: 0 auto;
+}
+#audios img {
+  border: 1px solid black;
+}
+audio {
+  max-width: 200px;
+  box-shadow: 0 0 0 1px black;
+}
+
+/* make it look less shit in Chromium. (It looks sleek and glamorous in Firefox. */
+audio::-webkit-media-controls-timeline {
+  display: none;
+}
+/* can't put a bg colour on the element itself, but can on the controls panel, which is effectively the same thing. transparent doesn't work.*/
+audio::-webkit-media-controls-panel {
+  background-color: #fbd1e5;
+}
+
+p,
+h2 {
+  margin-top: 0;
+}
+
+/*overlay the transcript or it makes the page longer and the tiled background image gets reflowed and it's jarring */
+
+details[open] {
+  position: absolute;
+  width: 200px;
+  background: white;
+	padding: 0.5em;
+}
+
+nav {
+  text-align: left;
+  background: url(/styles/nav-bg.png);
+  background-position: center left;
+  background-size: contain;
+  background-repeat: no-repeat;
+  padding-left: 150px;
+}
+
+@media only screen and (min-width: 1100px) {
+  body > div {
+    background: url(/styles/birdtile.png);
+    background-repeat: repeat round;
+  }
+}

@@ -1,0 +1,39 @@
+{
+    "name": "51degrees/fiftyone.pipeline.engines",
+    "description": "Engines shared functionality library for 51Degrees Pipeline API",
+	"authors" : [
+		{
+			"name": "Filip Hnízdo",
+            "email": "filip@octophin.com",
+            "homepage": "https://octophindigital.com/"
+        },
+		{
+			"name": "Steve Ballantine",
+            "email": "stephen@51degrees.com"
+        },
+		{
+			"name": "Ben Shilito",
+            "email": "ben@51degrees.com"
+        },
+		{
+			"name": "Joseph Dix",
+            "email": "joseph@51degrees.com"
+        }
+    ],
+    "license": "EUPL-1.2", 
+    "type": "library",
+    "autoload": {
+        "classmap": [
+            "AspectData.php",
+            "AspectDataDictionary.php",
+            "DataKeyedCache.php",
+            "Engine.php",
+            "MissingPropertyService.php",
+            "SessionCache.php",
+            "Tracker.php"
+        ]
+    },
+    "require": {
+        "51degrees/fiftyone.pipeline.core": "4.*"
+    }
+}

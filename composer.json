@@ -1,0 +1,5 @@
+{
+    "require": {
+        "51degrees/fiftyone.geolocation": "^4.1"
+    }
+}

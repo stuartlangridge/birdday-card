@@ -10,6 +10,12 @@ if (isset($_GET["nocache"])) {
             unlink($file); // delete file
         }
     }
+    $files = glob('/var/www/images/*'); // get all file names
+    foreach($files as $file){ // iterate files
+        if(is_file($file)) {
+            unlink($file); // delete file
+        }
+    }
 }
 
 list($lat, $lon, $data_cache_key) = validate();

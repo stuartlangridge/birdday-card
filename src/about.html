@@ -2,54 +2,25 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>What three birds? - about</title>
+<title>Which Three Birdies? - about</title>
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&amp;family=Roboto&amp;display=swap" rel="stylesheet">
-<style>
-html {
-    background: #FBD1E5;
-    min-height: 100vh;
-    font-family: Roboto, sans-serif;
-    padding: 1.5rem 0;
-    font-size: min(max(1rem, 4vw), 22px);
-}
-body {
-    padding: 0; margin: 0;
-}
-body > *:not(#themap) { padding-left: 1.5rem; padding-right: 1.5rem; }
-h1 {
-    color: #522D7E;
-    font-family: "Luckiest Guy", cursive;
-    font-size: 2rem;
-    line-height: 2rem;
-    margin-top: calc((1.5rem - 2rem) + 1.5rem);
-    margin-bottom: 1.5rem;
-    font-size: min(max(1rem, 8vw), 60px);
-    text-align: center;
-    text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
-}
-p {
-    line-height: 1.5rem;
-    margin-bottom: 1.5rem;
-}
-body pre code[class*="language-"] {
-    font-size: min(2.5vw, 1em);
-}
-figure { text-align: center; }
-</style>
+<link rel="stylesheet" href="styles.css">
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.22.0/themes/prism.css" rel="stylesheet" />
 </head>
 <body>
 </head>
 <body>
+<header>
+<h1>Which <span>Three</span> Birdies?™&copy;&reg;</h1>
+</header>
+<div><main>
+<h2>So, what’s this all about?</h2>
 
-<h1>About the “<a href="./">What Three Birds?™&copy;&reg;</a>” app</h1>
+<p>Essentially, <a href="/index.html">Which Three Birdies?™&copy;&reg;</a> is a chance to play with some nice APIs and stitch the results together. <a href="https://www.xeno-canto.org/">Xeno-Canto</a> have recordings of birdsong from all around the world. <a href="https://www.wikidata.org/">Wikidata</a> has pictures of all sorts of places and things. And <a href="https://51degrees.com">51 Degrees</a> can geolocate a point into a detailed native-language description of where that point is. Glue all those together and you’ve got... well, you’ve got a system for making a “birdday” card, right?</p>
 
-<p>So, what’s this all about?</p>
-
-<p>Essentially, this is a chance to play with some nice APIs and stitch the results together. <a href="https://www.xeno-canto.org/">Xeno-Canto</a> have recordings of birdsong from all around the world. <a href="https://www.wikidata.org/">Wikidata</a> has pictures of all sorts of places and things. And <a href="https://51degrees.com">51 Degrees</a> can geolocate a point into a detailed native-language description of where that point is. Glue all those together and you’ve got... well, you’ve got a system for making a “birdday” card, right?</p>
-
-<p>(The illusion of the single authorial "I" breaks for a moment here, where Stuart blames Bruce for the name and bangs his head frustratedly on the fourth wall. OK, no more asides to the audience. Back to the code.)</p>
+<p><i>(The illusion of the single authorial "I" breaks for a moment here, where Stuart blames Bruce for the name and bangs his head frustratedly on the fourth wall. OK, no more asides to the audience. Back to the code.)</i></p>
 
 <ol id="toc">
     <li><a href="#geoloc">Geolocating a point to an address with 51Degrees</a></li>
@@ -61,7 +32,7 @@ figure { text-align: center; }
 
 <h2 id="geoloc">(geo l-)O Captain, my captain! &mdash; geolocating a point <a href="#toc">&uarr;</a></h2>
 
-<p>Step 1 is to find a picture of a place. Well, we haven’t got a place; what we’ve got is some coordinates for a spot on the earth, latitude and longitude. So step zero is to find which place that is. Looking up a geographical point and giving it a name is the task of <em>geolocation</em>, and it is not as easy as you might think. Sometimes it’s simple enough: Big Ben is definitely in London, the Forbidden City is definitely in Beijing, and the Museu de Arte is in São Paulo. But which town is this field you’ve chosen closest to? What about the spot at the summit of Mount Kilimanjaro? If it’s not near a town, which region is it in? Which language should the answer be in? So we have someone else do the heavy lifting on that particular point.</p>
+<p>Step 1 is to find a picture of a place. Well, we haven’t got a place; what we’ve got is some coordinates for a spot on the earth, latitude and longitude. So step zero is to find which place that is. Looking up a geographical point and giving it a name is the task of <em>geolocation</em>, and it is not as easy as you might think. Sometimes it’s simple enough: Big Ben is definitely in London, the Forbidden City is definitely in Beijing, and (as John Donne memorably wrote) Stormont is in Ireland. But which town is this field you’ve chosen closest to? What about the spot at the summit of Mount Kilimanjaro? If it’s not near a town, which region is it in? Which language should the answer be in? So we have someone else do the heavy lifting on that particular point.</p>
 
 <p>Let’s try things for this place here: in the middle of the Green Mountain National Forest in the US state of Vermont. The birthplace (roughly) of <a href="hhttps://en.wikipedia.org/wiki/Rachel_Brooks_Gleason">Rachel Brooks Gleason</a>, born this day in 1820, fourth woman to earn a medical degree in the United States, and anti-slavery activist: latitude <code>43.156702</code>, longitude <code>-72.914178</code>.</p>
 
@@ -83,7 +54,7 @@ $flowData->evidence->set("query.51D_Pos_longitude", $lon);
 $result = $flowData->process();
 </code></pre>
 
-<p>That will populate our <code>$flowData</code> object with some or all of a town, a region, a state, and a country corresponding to the latitude (<code>$lat</code>) and longitude (<code>$lon</code>) we have. (You need an API key, what 51Degrees calls a “resource key”. See <a href="https://docs.51degrees.com/developers/v4">the 51Degrees API docs</a> for details on the above functions.)</p>
+<p>That will populate our <code>$flowData</code> object with some or all of a town, a region, a state, and a country corresponding to the latitude (<code>$lat</code>) and longitude (<code>$lon</code>) we have. (You need an API key, what 51Degrees calls a “resource key”. See <a href="https://51degrees.com/documentation/4.2/index.html">the 51Degrees API docs</a> for details on the above functions.)</p>
 
 <p>Now, not all of those things &mdash; town, region, state, country &mdash; are actually available for any given point. Some countries don’t really have “regions” or “states”; some points just aren’t very near an actual town at all. So we need to check whether each of those things are populated. The API does this in two ways; <code>location->whatever</code> might not be present at all, and if it is present it may have no value. So we check for each, and then we’ll have <code>$town</code>, <code>$region</code>, <code>$state</code>, and <code>$country</code> all either a string or <code>null</code>.</p>
 
@@ -226,10 +197,14 @@ if (!$country->hasValue) $country = null;
 
 <figure>
     <a href="birdday-card.php?lat=43.156702&amp;lon=-72.914178"><img src="img.php?lat=43.156702&amp;lon=-72.914178" alt="Rachel Brooks Gleason’s birdday card, showing the Winhall river in Vermont and the Canada goose, the mute swan, and the wood duck."></a>
-    <figcaption>happy birdday Rachel from <a href="https://kryogenix.org">Stuart Langridge</a> and <a href="https://brucelawson.co.uk">Bruce Lawson</a>!</figcaption>
+    <figcaption>happy birdday Rachel from Stuart and Bruce! xxx</figcaption>
 </figure>
-
-
+</main></div>
+<footer><small>Made by <a href="https://kryogenix.org/">Stuart Langridge</a> (<a
+	href="https://twitter.com/sil">@sil</a>) and <a href="https://brucelawson.co.uk">Bruce Lawson</a> (<a
+	href="https://twitter.com/brucel">@brucel</a>). The header drawing is by <a
+	href="https://openclipart.org/detail/219787/owl-and-a-birds">Rones</a>. <br>Not many birds were harmed during the coding of this website (but Bruce ate a chicken  sandwich while writing the CSS). <br>Source is on <a href="https://github.com/stuartlangridge/birdday-card/">Github</a>, licensed under the <a href="https://web.archive.org/web/20140924010836/http://wiseearthpublishers.com/sites/wiseearthpublishers.com/files/PeacefulOSL.txt">Peaceful Open Source License</a>.</small>
+</footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.22.0/components/prism-core.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.22.0/plugins/autoloader/prism-autoloader.min.js"></script>
 </body>

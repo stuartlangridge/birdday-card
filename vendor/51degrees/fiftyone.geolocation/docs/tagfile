@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<tagfile>
+  <compound kind="class">
+    <name>fiftyone::pipeline::geolocation::geoLocation</name>
+    <filename>classfiftyone_1_1pipeline_1_1geolocation_1_1geo_location.html</filename>
+  </compound>
+  <compound kind="class">
+    <name>fiftyone::pipeline::geolocation::geoLocationPipelineBuilder</name>
+    <filename>classfiftyone_1_1pipeline_1_1geolocation_1_1geo_location_pipeline_builder.html</filename>
+  </compound>
+  <compound kind="page">
+    <name>md_D:_Workspace_V4_location-php_readme</name>
+    <title>51Degrees Geo-Location Engines</title>
+    <filename>md__d_1__workspace__v4_location-php_readme</filename>
+  </compound>
+</tagfile>

@@ -1,2 +1,9 @@
 cache/*
 images/*
+aws.csv
+venv
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

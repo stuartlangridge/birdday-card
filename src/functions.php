@@ -10,13 +10,19 @@ function decho($s) {
             echo "<pre>";
             $first_debug_print = FALSE;
         }
-        echo $s . "\n";
+        echo htmlentities($s) . "\n";
     }
 }
 
 function get_filename($lat, $lon) {
     $fn = __DIR__ . "/../images/img_" . $lat . "__" . $lon . ".jpg";
     decho("Filename from $lat and $lon is $fn");
+    return $fn;
+}
+
+function get_bird_image_filename($species) {
+    $fn = __DIR__ . "/../images/bird_" . md5($species) . ".jpg";
+    decho("Bird image cache filename from $species is $fn");
     return $fn;
 }
 
@@ -226,7 +232,8 @@ function xeno_canto($lat, $lon) {
                         "image" => $birdimg,
                         "wikidata" => $birdpublic,
                         "species" => $birdspec,
-                        "sound_url" => $xdo["recordings"][$i]["file"]
+                        "sound_url" => $xdo["recordings"][$i]["file"],
+                        "cache_image" => get_bird_image_filename($birdspec)
                     );
                     if (count($birds) == 3) break;
                 } else {
@@ -271,15 +278,29 @@ function scaler($im, $w, $h) {
     } else if ($nh > $h) {
         $cx = 0;
         $cy = ceil(($nh - $h) / 2);
+    } else {
+        $cx = 0;
+        $cy = 0;
     }
     decho("Cropping image of size $nw $nh to be size $w $h from point $cx $cy");
     $n = imagecrop($n, array("x" => $cx, "y" => $cy, "width" => $w, "height" => $h));
     return $n;
 }
 
-function add_bird($base, $bird, $w, $h, $x, $y, $border) {
+function add_bird($base, $bird, $cache_image, $w, $h, $x, $y, $border) {
     decho("Loading bird image: " . $bird);
-    $b1 = @imagecreatefromjpeg($bird);
+    decho("Checking bird cache image $cache_image");
+    $b1 = FALSE;
+    if (file_exists($cache_image)) {
+        $b1 = imagecreatefromjpeg($cache_image);
+        if ($b1 === FALSE) {
+            decho("Couldn't load cached bird image $bird!");
+        }
+    }
+
+    if ($b1 === FALSE) {
+        $b1 = @imagecreatefromjpeg($bird);
+    }
     if ($b1 === FALSE) {
         decho("Couldn't load bird image $bird!");
         return;
@@ -288,6 +309,10 @@ function add_bird($base, $bird, $w, $h, $x, $y, $border) {
     imagecopymerge($base, $b1, $x, $y, 0, 0, $w, $h, 100);
     $borderimg = @imagecreatefrompng($border);
     imagecopy($base, $borderimg, $x, $y, 0, 0, $w, $h);
+    if (!file_exists($cache_image)) {
+        imagejpeg($b1, $cache_image);
+    }
+    decho("Saved bird cache image as $cache_image");
 }
 
 function create_save_image($fn, $lat, $lon, $data_cache_key) {
@@ -302,7 +327,34 @@ function create_save_image($fn, $lat, $lon, $data_cache_key) {
     list($image_url, $townurl) = wikidata_image($loc_descriptions, 1000);
     decho("Base image URL is $image_url");
     list($birds, $xenourl) = xeno_canto($lat, $lon);
-    decho("Got birds");
+    decho("Got birds: " . json_encode($birds));#
+
+    if (count($birds) == 0) {
+        decho("No birds, so adding the Three Fictional Birds");
+        $birds = array(
+            array(
+                "image" => "/about-images/dodo.jpg",
+                "wikidata" => "https://en.wikipedia.org/wiki/Dodo",
+                "species" => "Raphus cucullatus (dodo)",
+                "sound_url" => "/about-images/dodo.mp3",
+                "cache_image" => __DIR__ . "/about-images/dodo.jpg"
+            ),
+            array(
+                "image" => "/about-images/charlie_parker.jpg",
+                "wikidata" => "https://en.wikipedia.org/wiki/Charlie_Parker",
+                "species" => 'Charlie “Bird” Parker',
+                "sound_url" => "/about-images/charlie_parker.mp3",
+                "cache_image" => __DIR__ . "/about-images/charlie_parker.jpg"
+            ),
+            array(
+                "image" => "/about-images/thunderbird_2.jpg",
+                "wikidata" => "https://en.wikipedia.org/wiki/Thunderbirds_machines#Thunderbird_2",
+                "species" => "Thunderbird 2",
+                "sound_url" => "/about-images/Sound_of_AN-24_airplane_not_actually_thunderbird_2.mp3",
+                "cache_image" => __DIR__ . "/about-images/thunderbird_2.jpg"
+            )
+        );
+    }
 
     store_cache_key($data_cache_key, json_encode(array(
         "birds" => $birds,
@@ -330,11 +382,11 @@ function create_save_image($fn, $lat, $lon, $data_cache_key) {
     // composite birds onto base image
     switch (count($birds)) {
         case 3:
-            add_bird($base, $birds[2]["image"], 200, 120, 466, 180, "decoration/wonderfulcelcticdragons.png");
+            add_bird($base, $birds[2]["image"], $birds[2]["cache_image"], 200, 120, 466, 180, "decoration/wonderfulcelcticdragons.png");
         case 2:
-            add_bird($base, $birds[1]["image"], 200, 120, 133, 180, "decoration/simpleoldornateframe.png");
+            add_bird($base, $birds[1]["image"], $birds[1]["cache_image"], 200, 120, 133, 180, "decoration/simpleoldornateframe.png");
         case 1:
-            add_bird($base, $birds[0]["image"], 200, 120, 300, 30, "decoration/coolasianframe.png");
+            add_bird($base, $birds[0]["image"], $birds[0]["cache_image"], 200, 120, 300, 30, "decoration/coolasianframe.png");
         default:
             break;
     }
