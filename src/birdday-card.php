@@ -51,14 +51,12 @@ list($lat, $lon, $data_cache_key) = validate();
         left: 0;
         background-color: transparent;
         z-index: -1;
-        filter: invert(70%) sepia(550) hue-rotate(150deg);
     }
 
     figure::after {
         top: 400px animation-delay: 0.2s, -0.6s;
         animation-duration: 0.51s, 2.3s;
         animation-name: fly-cycle, scrollup;
-        filter: invert(70%) sepia(550) hue-rotate(150deg);
     }
 
     @keyframes fly-cycle {
@@ -170,7 +168,8 @@ list($lat, $lon, $data_cache_key) = validate();
         <main>
             <figure aria-busy="true">
                 <img id="card" src="img.php?lat=<?php echo $lat; ?>&amp;lon=<?php echo $lon; ?>"
-                    alt="loading your card..." onerror="imgfail()" onload="imgsuccess()">
+                    alt="loading your card..." onerror="imgfail()" onload="imgsuccess()"
+                    width="800" height="540">
             </figure>
             <div id="audios"></div>
 
@@ -189,7 +188,7 @@ list($lat, $lon, $data_cache_key) = validate();
                 href="https://twitter.com/brucel">@brucel</a>). The header drawing is by <a
                 href="https://openclipart.org/detail/219787/owl-and-a-birds">Rones</a>.<br>Not many birds were harmed
             during the coding of this website (but Bruce ate a chicken sandwich while writing the CSS). <br>Source is on
-            Github,
+            <a href="https://github.com/stuartlangridge/birdday-card/">Github</a>,
             licensed under the <a
                 href="https://web.archive.org/web/20140924010836/http://wiseearthpublishers.com/sites/wiseearthpublishers.com/files/PeacefulOSL.txt">Peaceful
                 Open Source License</a>.</small>
