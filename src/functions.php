@@ -299,7 +299,8 @@ function add_bird($base, $bird, $cache_image, $w, $h, $x, $y, $border) {
     }
 
     if ($b1 === FALSE) {
-        $b1 = @imagecreatefromjpeg($bird);
+        $context = stream_context_create(["http" => ["user_agent" => "Which3Birdies/1.0"]]);
+        $b1 = @imagecreatefromstring(file_get_contents($bird, false, $context));
     }
     if ($b1 === FALSE) {
         decho("Couldn't load bird image $bird!");
@@ -369,7 +370,8 @@ function create_save_image($fn, $lat, $lon, $data_cache_key) {
 
     // Get base image into a GD image object
     decho("Loading base image $image_url");
-    $base = imagecreatefromjpeg($image_url);
+    $context = stream_context_create(["http" => ["user_agent" => "Which3Birdies/1.0"]]);
+    $base = imagecreatefromstring(file_get_contents($image_url, false, $context));
     if ($base === FALSE) {
         decho("Couldn't load $image_url");
         die();
